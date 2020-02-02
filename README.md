@@ -24,3 +24,13 @@ astounds me. This deep fascination in our own world that we exist in motivated m
 explore that concept in another light - through programming.  Not only would working on this
 project be something truly exciting for me, the prospect of accurately and precisely simulating 
 real-world actions would also quite challenging to me.   
+
+
+####Phase 1: Stories
+As a user, I want to...
+- see objects in the sandbox via a _graphic interface_
+- have _objects_ with physical properties (mass, volume, etc) that I can specify
+- have a menu to choose _types of objects_ to make
+- have a menu to select the _physical properties_ of each object
+- have an _environment_ that contains the sandbox 
+
