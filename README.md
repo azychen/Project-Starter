@@ -28,9 +28,9 @@ real-world actions would also quite challenging to me.
 
 ####Phase 1: Stories
 As a user, I want to...
-- see objects in the sandbox via a _graphic interface_
-- have _objects_ with physical properties (mass, volume, etc) that I can specify
-- have a menu to choose _types of objects_ to make
-- have a menu to select the _physical properties_ of each object
-- have an _environment_ that contains the sandbox 
+- see the objects _move_
+- _add_ objects to the sandbox
+- _delete_ objects from the sandbox
+- _change_ the properties of an object already in the sandbox
+
 
