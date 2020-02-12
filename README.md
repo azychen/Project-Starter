@@ -1,13 +1,13 @@
-# Physics Sandbox
+# Ball Pit
 
-![shapes](https://static.vecteezy.com/system/resources/previews/000/142/787/large_2x/prisma-vector-icons-set.jpg)
+![shapes](https://www.littlestepsasia.com/sites/default/files/imagecache/article_node_image/article/hero/Best-Indoor-Playrooms-Hong-Kong_0.png)
 ## Anton Chen 
 
 > _**What** will the application do?_
 
-This project will be able simulate a 2 dimensional physical environment including 
-the effects of gravitational, buoyant, and drag forces. In addition, various objects may be 
-created by a user, including solids, liquids, and gases - all with physical
+This project will be able simulate a 2 dimensional physical environment under
+the effects of gravity and collisions with other objects. In addition, various objects may be 
+created by a user, including balls - all with physical
 properties able to be specified by the user.
 
 > _**Who** will use it?_
@@ -22,15 +22,19 @@ including calculations and values, simulating an experimental setting.
 The notion that mathematics, a purely man-made concept, can accurately explain real world phenomena
 astounds me. This deep fascination in our own world that we exist in motivated me to further 
 explore that concept in another light - through programming.  Not only would working on this
-project be something truly exciting for me, the prospect of accurately and precisely simulating 
+project be something truly exciting for me, it would also be greatly beneficial
+to the future of the field. Targeting a younger demographic is a 
+key component of this project, with the aim of sparking interest
+in this field by demonstrating how fun physical phenomena may be.
+Additionally, the prospect of accurately and precisely simulating 
 real-world actions would also quite challenging to me.   
 
 
 ####Phase 1: Stories
 As a user, I want to...
-- see the objects _move_
-- _add_ objects to the sandbox
-- _delete_ objects from the sandbox
-- _change_ the properties of an object already in the sandbox
+- see the balls _move_
+- _add_ balls to the BallPit
+- _delete_ balls from the BallPit
+- see the balls _interact_ with each other and the environment
 
 
