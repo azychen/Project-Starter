@@ -6,7 +6,12 @@ import java.awt.*;
 
 import static java.lang.Math.*;
 
-//
+/*
+ *      This class represents the ball inside of the BallPit.
+ *      It has various physical and UI properties.
+ */
+
+
 public class Ball extends Matter {
 
     public static final double PI = 3.1415926535;
@@ -75,7 +80,7 @@ public class Ball extends Matter {
         return posY;
     }
 
-    // EFFECTS: returns the magnitude of the speed in 2 dimensions
+    // EFFECTS: returns the magnitude of the Ball speed
     public double getSpeed() {
         return sqrt(speedX * speedX + speedY * speedY);
     }
@@ -157,7 +162,7 @@ public class Ball extends Matter {
      */
 
 
-    // EFFECTS: returns true if this has collided with other
+    // EFFECTS: returns true if this has collided with other, false otherwise
     public boolean collision(Ball c) {
         double distanceBetweenX = pow((getPosX() - c.getPosX()), 2);
         double distanceBetweenY = pow((getPosY() - c.getPosY()), 2);
@@ -170,7 +175,7 @@ public class Ball extends Matter {
     // MODIFIES: this and other
     // EFFECTS:  through conservation of momentum in one and two dimensions,
     //           the speed of this and other are changed accordingly
-    // SOURCE: formulas to calculate final velocities was found on wikipedia:
+    // SOURCE: formulas to calculate final velocities was found on Wikipedia:
     //         https://en.wikipedia.org/wiki/Elastic_collision
     public void bounce(Ball c) {
         if (abs(posX - c.getPosX()) <= 0.01) {

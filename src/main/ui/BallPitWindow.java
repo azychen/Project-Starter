@@ -19,7 +19,7 @@ public class BallPitWindow {
     private BallPit ballPit;
     private Color backgroundColor = Color.WHITE;
 
-    private static DecimalFormat round = new DecimalFormat("#.##");
+    private static DecimalFormat round = new DecimalFormat("0.00");
 
     // EFFECTS: creates a window with a new ballpit
     public BallPitWindow() {
@@ -115,12 +115,6 @@ public class BallPitWindow {
     }
 
 
-
-
-
-
-
-
     // EFFECTS: prints information relating to the matter in the BallPit
     public void printInfo() {
         if (ballPit.getBalls().size() == 0) {
@@ -138,11 +132,14 @@ public class BallPitWindow {
     }
 
     // EFFECTS: prints out the coordinates of the balls
+    // SOURCE: https://stackoverflow.com/questions/699878/is-there-an-easy-way-to-output-two-columns-to-the-console-in-java
+    //         for print formatting
     public void printCoords() {
         for (Ball b : ballPit.getBalls()) {
-            System.out.print("#" + b.getIndex() + ": "
+            System.out.printf("%-20s \t",
+                    "#" + b.getIndex() + ": "
                     + "(" + round.format(b.getPosX()) + ", "
-                    + round.format(b.getPosY()) + ") \t");
+                    + round.format(b.getPosY()) + ")");
         }
         System.out.println(" ");
     }
@@ -163,12 +160,15 @@ public class BallPitWindow {
     // MODIFIES: this
     // EFFECTS: advances BallPit by specified amount of seconds
     public void advanceBallPit(int s) {
+        System.out.println("\n Advancing state. Printing coordinates: \n");
         for (int i = 0; i < s / BallPit.tickRate; ++i) {
             if (i % 5 == 0) {
                 printCoords();
             }
             getBallPit().nextState();
         }
+        System.out.println("\n Here are the balls after " + s + " seconds:\n");
+        printInfo();
     }
 
     // MODIFIES: this
@@ -185,6 +185,7 @@ public class BallPitWindow {
         ballPit.removeBall(b);
     }
 
+    // EFFECTS: prints out a welcome message once ball pit is created
     public void welcomeMessage() {
         System.out.println("Welcome to the Ball Pit! \n");
     }

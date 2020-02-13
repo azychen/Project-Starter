@@ -2,6 +2,9 @@ package ui;
 
 import model.matter.Ball;
 
+/*
+ *      This is the entry point for the program.
+ */
 
 public class Main {
 

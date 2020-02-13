@@ -7,6 +7,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/*
+ *      This is the test class for BallPit. It tests all of the public
+ *      methods in the class!
+ */
+
+
+
 public class BallPitTest {
 
     private BallPit testPit;
@@ -72,8 +79,21 @@ public class BallPitTest {
     }
 
     @Test
-    public void testNextState() {
-
+    public void testNextStateMultipleBallsCollision() {
+        testPit.clearBallPit();
+        Ball nsb1 = new Ball(20, 3, 1, 1);
+        Ball nsb2 = new Ball(20, 5, 1, 1);
+        testPit.addBall(nsb1);
+        testPit.addBall(nsb2);
+        testPit.nextState();
+        assertEquals(3, nsb1.getPosX(), 0.03);
+        assertEquals(5, nsb2.getPosX(), 0.03);
+        assertEquals(1, nsb1.getPosY(), 0.03);
+        assertEquals(1, nsb2.getPosY(), 0.03);
+        assertEquals(0, nsb1.getSpeedX());
+        assertEquals(0, nsb2.getSpeedX());
+        assertEquals(0.2 * Ball.conserved, nsb1.getSpeedY(), 0.03);
+        assertEquals(0.2 * Ball.conserved, nsb2.getSpeedY(), 0.03);
     }
 
 
@@ -100,8 +120,8 @@ public class BallPitTest {
         testPit.addBall(b2);
         testPit.nextState();
 
-        assertEquals(b4.getRadius(), b4.getPosY());
-        assertEquals(b4.getRadius(), b4.getPosX());
+        assertEquals(b4.getRadius(), b4.getPosY(), 0.04);
+        assertEquals(b4.getRadius(), b4.getPosX(), 0.04);
         assertEquals(2.0, b2.getPosY());
         assertEquals(2.0, b2.getPosX());
 
@@ -115,8 +135,8 @@ public class BallPitTest {
         testPit.addBall(b2);
         testPit.nextState();
 
-        assertEquals(BallPit.HEIGHT - b5.getRadius(), b5.getPosY());
-        assertEquals(BallPit.WIDTH - b5.getRadius(), b5.getPosX());
+        assertEquals(BallPit.HEIGHT - b5.getRadius(), b5.getPosY(), 0.04);
+        assertEquals(BallPit.WIDTH - b5.getRadius(), b5.getPosX(), 0.04);
         assertEquals(2.0, b2.getPosY());
         assertEquals(2.0, b2.getPosX());
     }
