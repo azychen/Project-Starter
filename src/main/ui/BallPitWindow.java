@@ -99,7 +99,16 @@ public class BallPitWindow {
             command = input.next().toLowerCase();
 
             if (command.equals("q")) {
-                break;
+                System.out.println("Would you like to save " + ballPit.getName() + "? (y/n)\n");
+                command = input.next().toLowerCase();
+                if (command.equals("y")) {
+                    processSavePit();
+                    break;
+                } else if (!command.equals("n")) {
+                    System.out.println("Invalid input.\n");
+                } else {
+                    break;
+                }
             } else {
                 processSandboxMenuInput(command);
             }
