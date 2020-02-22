@@ -37,4 +37,8 @@ As a user, I want to...
 - [x] _delete_ balls from the BallPit
 - [x] see the balls _interact_ with each other and the environment
 
-
+####Phase 2: Stories
+As a user, I want to...
+- [x] _save_ the current state of the sandbox
+- [x] _load_ another sandbox's state
+- [x] _prompt_ the user to save when exiting sandbox

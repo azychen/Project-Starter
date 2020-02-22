@@ -12,18 +12,12 @@ public class Main {
 
         BallPitWindow window = new BallPitWindow();
 
-        Ball b1 = new Ball(1000, 3.0, 2.0, 0.25);
-        Ball b2 = new Ball(3, 2.8, 2.6, 0.25);
+        window.runMainMenu();
 
-        window.addBall(b1);
-        window.addBall(b2);
+//        Run demo:
 
-        window.printInfo();
-
-        window.moveDemo();
-        window.addDemo();
-        window.removeDemo();
-        window.interactDemo();
+//        Demo demo = new Demo();
+//        demo.runDemo();
 
 
     }

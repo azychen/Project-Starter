@@ -1,6 +1,9 @@
 package model;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
+
 import model.matter.Ball;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +26,7 @@ public class BallPitTest {
 
     @BeforeEach
     public void setup() {
-        testPit = new BallPit();
+        testPit = new BallPit("Anton's Ball Pit");
         b1 = new Ball();
         b2 = new Ball(8, 2.0, 2.0, 0.2);
         testPit.addBall(b1);
@@ -34,6 +37,18 @@ public class BallPitTest {
     @Test
     public void testBallPit() {
         assertEquals(testPit.getBalls().size(), 2);
+        assertEquals("Anton's Ball Pit", testPit.getName());
+    }
+
+    @Test
+    public void testBallPitWithExistingBalls() {
+        List<Ball> balls = new ArrayList<>();
+        for (int i = 0; i < 5; ++i) {
+            balls.add(new Ball());
+        }
+        BallPit myPit = new BallPit("myPit", balls);
+        assertEquals("myPit", myPit.getName());
+        assertEquals(5, myPit.getBalls().size());
     }
 
     @Test
@@ -41,6 +56,19 @@ public class BallPitTest {
         assertEquals(testPit.getBalls().get(0), b1);
         assertEquals(testPit.getBalls().get(1), b2);
         assertEquals(testPit.getBalls().size(), 2);
+    }
+
+    @Test
+    public void testGetName() {
+        assertEquals("Anton's Ball Pit", testPit.getName());
+    }
+
+    @Test
+    public void testSetName() {
+        assertEquals("Anton's Ball Pit", testPit.getName());
+        testPit.setName("Anton's Revised Ball Pit");
+        assertEquals("Anton's Revised Ball Pit", testPit.getName());
+
     }
 
     @Test
@@ -101,15 +129,12 @@ public class BallPitTest {
     @Test
     public void testMoveBalls() {
         testPit.nextState();
-        assertEquals(6.0, testPit.getBalls().get(0).getPosX());
-        assertEquals(4.0, testPit.getBalls().get(0).getPosY());
-        assertEquals(-9.81*BallPit.tickRate, testPit.getBalls().get(0).getSpeedY(), 0.01);
-        assertEquals(0, testPit.getBalls().get(0).getSpeedX());
 
-        assertEquals(2.0, testPit.getBalls().get(1).getPosX());
-        assertEquals(2.0, testPit.getBalls().get(1).getPosY());
+        assertEquals(-9.81*BallPit.tickRate, testPit.getBalls().get(0).getSpeedY(), 0.01);
+        assertEquals(0, testPit.getBalls().get(0).getSpeedX(), 0.01);
+
         assertEquals(-9.81*BallPit.tickRate, testPit.getBalls().get(1).getSpeedY(), 0.01);
-        assertEquals(0, testPit.getBalls().get(1).getSpeedX());
+        assertEquals(0, testPit.getBalls().get(1).getSpeedX(), 0.01);
     }
 
     @Test
@@ -139,6 +164,11 @@ public class BallPitTest {
         assertEquals(BallPit.WIDTH - b5.getRadius(), b5.getPosX(), 0.04);
         assertEquals(2.0, b2.getPosY());
         assertEquals(2.0, b2.getPosX());
+    }
+
+    @Test
+    public void testSave() {
+
     }
 
 }

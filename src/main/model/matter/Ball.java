@@ -2,7 +2,7 @@ package model.matter;
 
 import model.BallPit;
 
-import java.awt.*;
+import java.util.Random;
 
 import static java.lang.Math.*;
 
@@ -30,6 +30,20 @@ public class Ball extends Matter {
 
     // REQUIRES: mass > 0
     // EFFECTS: constructs a Ball with user-defined parameters.
+    public Ball(double m, double x, double y, double r, double dx, double dy, int i) {
+        super();
+        mass = m;
+        posX = x;
+        posY = y;
+        speedX = dx;
+        speedY = dy;
+        index = i;
+        radius = r;
+        volume = getVolume();
+    }
+
+    // REQUIRES: mass > 0
+    // EFFECTS: constructs a Ball with user-defined parameters.
     public Ball(double m, double x, double y, double r) {
         super();
         mass = m;
@@ -47,12 +61,11 @@ public class Ball extends Matter {
     public Ball(double m, double r) {
         super();
         mass = m;
-        posX = defaultPosX;
-        posY = defaultPosY;
+        radius = r;
+        setRandomLocation();
         speedX = 0;
         speedY = 0;
         index = nextIndex++;
-        radius = r;
         volume = getVolume();
     }
 
@@ -61,12 +74,11 @@ public class Ball extends Matter {
     public Ball() {
         super();
         mass = defaultMass;
-        posX = defaultPosX;
-        posY = defaultPosY;
+        radius = defaultRadius;
+        setRandomLocation();
         speedX = 0;
         speedY = 0;
         index = nextIndex++;
-        radius = defaultRadius;
         volume = getVolume();
     }
 
@@ -161,13 +173,16 @@ public class Ball extends Matter {
      * PHYSICAL INTERACTIONS
      */
 
+    // EFFECTS: returns the distance between the centers of two balls
+    public double getDistance(Ball c) {
+        double distanceBetweenX = pow((getPosX() - c.getPosX()), 2);
+        double distanceBetweenY = pow((getPosY() - c.getPosY()), 2);
+        return sqrt(distanceBetweenX + distanceBetweenY);
+    }
 
     // EFFECTS: returns true if this has collided with other, false otherwise
     public boolean collision(Ball c) {
-        double distanceBetweenX = pow((getPosX() - c.getPosX()), 2);
-        double distanceBetweenY = pow((getPosY() - c.getPosY()), 2);
-        double distance = sqrt(distanceBetweenX + distanceBetweenY);
-        return (distance  < (getRadius() + c.getRadius()));
+        return (getDistance(c)  < (radius + c.getRadius()));
     }
 
     // REQUIRES: both balls have collided, at least one is moving,
@@ -242,4 +257,16 @@ public class Ball extends Matter {
         c.setSpeedX(v2 * cos(theta));
         c.setSpeedY(v2 * sin(theta));
     }
+
+    // MODIFIES: this
+    // EFFECTS: sets random coordinate for ball to be spawned at.
+    private void setRandomLocation() {
+        Random n = new Random();
+        setPosX(radius + (BallPit.WIDTH - radius) * n.nextDouble());
+        setPosY(radius + (BallPit.HEIGHT - radius) * n.nextDouble());
+    }
+
+    // MODIFIES: this
+    // EFFECTS: separates the balls
+
 }

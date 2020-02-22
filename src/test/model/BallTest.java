@@ -37,9 +37,19 @@ public class BallTest {
         assertEquals(Ball.defaultMass, s1.getMass());
         assertEquals(0, s1.getSpeedX());
         assertEquals(0, s1.getSpeedY());
-        assertEquals(BallPit.WIDTH/2, s1.getPosX());
-        assertEquals(BallPit.HEIGHT/2, s1.getPosY());
         assertEquals(Ball.PI * Matter.depth, s1.getVolume(), 0.01);
+    }
+
+    @Test
+    void testBallUserAllParametersSpecified() {
+        Ball testBall = new Ball(7.6, 7.5, 7.4, 7.3, 7.2, 7.1, 7);
+        assertEquals(7.6, testBall.getMass());
+        assertEquals(7.5, testBall.getPosX());
+        assertEquals(7.4, testBall.getPosY());
+        assertEquals(7.3, testBall.getRadius());
+        assertEquals(7.2, testBall.getSpeedX());
+        assertEquals(7.1, testBall.getSpeedY());
+        assertEquals(7, testBall.getIndex());
     }
 
     @Test
@@ -57,8 +67,6 @@ public class BallTest {
         assertEquals(Ball.defaultMass, s1.getMass());
         assertEquals(0, s1.getSpeedX());
         assertEquals(0, s1.getSpeedY());
-        assertEquals(BallPit.WIDTH/2, s1.getPosX());
-        assertEquals(BallPit.HEIGHT/2, s1.getPosY());
         assertEquals(Ball.PI * Matter.depth, s1.getVolume(), 0.01);
     }
 

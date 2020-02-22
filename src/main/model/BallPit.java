@@ -1,7 +1,10 @@
 package model;
 
 import model.matter.Ball;
+import persistence.Reader;
+import persistence.Saveable;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +15,7 @@ import static model.matter.Matter.conserved;
  *      It handles all of the physical interactions.
  */
 
-public class BallPit {
+public class BallPit implements Saveable {
 
     // CONSTANTS
     public static final double pixelsToMeters = 0.01;
@@ -22,15 +25,36 @@ public class BallPit {
     public static final double HEIGHT = 8.0;
 
     private List<Ball> balls;
+    private String name;
 
+
+    // EFFECTS: creates new ball pit with default name
     public BallPit() {
+        name = "My Ball Pit";
         balls = new ArrayList<>();
+    }
+
+    // EFFECTS: creates new ball pit with given name;
+    public BallPit(String name) {
+        balls = new ArrayList<>();
+        this.name = name;
+    }
+
+    // EFFECTS: creates ball pit with name and existing list of balls;
+    public BallPit(String name, List<Ball> balls) {
+        this.balls = balls;
+        this.name = name;
     }
 
 
     // EFFECTS: returns the list of Balls int the BallPit
     public List<Ball> getBalls() {
         return balls;
+    }
+
+    // EFFECTS: returns the name of the BallPit
+    public String getName() {
+        return name;
     }
 
 
@@ -56,6 +80,11 @@ public class BallPit {
         balls.clear();
     }
 
+    // MODIFIES: this
+    // EFFECTS: sets the name of the ball pit to a new given name
+    public void setName(String name) {
+        this.name = name;
+    }
 
     // MODIFIES: this
     // EFFECTS: advances to the next frame in the BallPit
@@ -153,4 +182,39 @@ public class BallPit {
         }
     }
 
+
+    // EFFECTS: prints ball pit data to print writer
+    @Override
+    public void save(PrintWriter printWriter) {
+        printWriter.print(name);
+        printWriter.print(Reader.DELIMITER);
+        for (int i = 0; i < balls.size(); ++i) {
+
+            printWriter.print(balls.get(i).getMass());
+            printWriter.print(Reader.DELIMITER);
+
+            printWriter.print(balls.get(i).getPosX());
+            printWriter.print(Reader.DELIMITER);
+
+            printWriter.print(balls.get(i).getPosY());
+            printWriter.print(Reader.DELIMITER);
+
+            printWriter.print(balls.get(i).getRadius());
+            printWriter.print(Reader.DELIMITER);
+
+            printWriter.print(balls.get(i).getSpeedX());
+            printWriter.print(Reader.DELIMITER);
+
+            printWriter.print(balls.get(i).getSpeedY());
+            printWriter.print(Reader.DELIMITER);
+
+            if (i < balls.size() - 1) {
+                printWriter.print(balls.get(i).getIndex());
+                printWriter.print(Reader.DELIMITER);
+            } else {
+                printWriter.println(balls.get(i).getIndex());
+            }
+
+        }
+    }
 }

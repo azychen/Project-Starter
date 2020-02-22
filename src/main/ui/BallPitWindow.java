@@ -2,9 +2,18 @@ package ui;
 
 import model.*;
 import model.matter.Ball;
+import persistence.Reader;
+import persistence.Writer;
 
 import java.awt.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
+import java.util.List;
+import java.util.Objects;
+import java.util.Scanner;
 
 /*
  *      This class is the representation of what is shown on the screen.
@@ -16,10 +25,13 @@ import java.text.DecimalFormat;
 
 public class BallPitWindow {
 
-    private BallPit ballPit;
-    private Color backgroundColor = Color.WHITE;
+    protected BallPit ballPit;
+    protected Color backgroundColor = Color.WHITE;
+    protected static final String BALLPITS_FILE = "./data/ballpits.txt";
+    protected static DecimalFormat round = new DecimalFormat("0.00");
 
-    private static DecimalFormat round = new DecimalFormat("0.00");
+    protected Scanner input;
+
 
     // EFFECTS: creates a window with a new ballpit
     public BallPitWindow() {
@@ -33,95 +45,252 @@ public class BallPitWindow {
         welcomeMessage();
     }
 
-    /*
-     *         D E M O S
-     */
+    // MODIFIES: this
+    // EFFECTS: runs the main menu selection
+    public void runMainMenu() {
+        input = new Scanner(System.in);
+        String command;
+
+        while (true) {
+            printMainMenuOptions();
+            command = input.next().toLowerCase();
+
+            if (command.equals("q")) {
+                break;
+            } else {
+                processMainMenuInput(command);
+            }
+        }
+        goodbyeMessage();
+    }
+
+    // EFFECTS: prints main menu options
+    protected void printMainMenuOptions() {
+        System.out.println("What would you like to do? Enter command... \n");
+        System.out.println("\t[s] - start new sandbox");
+        System.out.println("\t[l] - load a saved sandbox");
+        System.out.println("\t[q] - quit sandbox");
+    }
+
 
     // MODIFIES: this
-    // EFFECTS: plays the move demo
-    public void moveDemo() {
-        System.out.println("\n Here is a demo illustrating that the balls can move!");
-        System.out.println("Particularly, this was my first story. \n");
-
-        advanceBallPit(5);
+    // EFFECTS: selects use command in main menu
+    protected void processMainMenuInput(String input) {
+        switch (input) {
+            case "s":
+                newSandbox();
+                break;
+            case "l":
+                loadSandbox();
+                break;
+            default:
+                System.out.println("Invalid input");
+        }
     }
 
     // MODIFIES: this
-    // EFFECTS: plays the add demo
-    public void addDemo() {
-        System.out.println("\n Here is a demo illustrating that I can add balls to the ball pit.");
-        System.out.println("Particularly, this was my second story. \n");
+    // EFFECTS: runs the in-sandbox menu options
+    protected void runSandboxMenu() {
+        input = new Scanner(System.in);
+        String command;
 
-        Ball b3 = new Ball();
-        Ball b4 = new Ball(1000, 2);
+        while (true) {
+            printSandboxMenuOptions();
+            command = input.next().toLowerCase();
 
-        addBall(b3);
-        addBall(b4);
+            if (command.equals("q")) {
+                break;
+            } else {
+                processSandboxMenuInput(command);
+            }
+        }
+        System.out.println("Successfully exited to main menu.\n");
+    }
 
+    // MODIFIES: this
+    // EFFECTS: starts new sandbox
+    protected void newSandbox() {
 
-        System.out.println("\n In the following, we see that we have added two more balls: \n ");
+        input = new Scanner(System.in);
+        String command;
+
+        System.out.println("Would you like to give your sandbox a name? (y/n)");
+
+        command = input.next().toLowerCase();
+        switch (command) {
+            case "n":
+                System.out.println("Creating new Ball Pit... ");
+                ballPit = new BallPit();
+                break;
+            case "y":
+                System.out.println("What would you like to name your ball pit? ");
+                String newName = input.next();
+
+                System.out.println("Creating " + newName + "\n");
+                ballPit = new BallPit(newName);
+        }
+        runSandboxMenu();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads sandbox !!!
+    protected void loadSandbox() {
+        try {
+            List<BallPit> pits = Reader.readBallPits(new File(BALLPITS_FILE));
+            if (pits.size() < 1) {
+                System.out.println("There are no saved ball pits!"
+                        + "Why not make a new one?\n");
+                return;
+            }
+            System.out.println("Which ball pit would you like to load? Enter number...\n");
+            printBallPits(pits);
+            int command = input.nextInt();
+            if (command > pits.size() + 1) {
+                throw new IOException();
+            }
+            ballPit = pits.get(command - 1);
+            System.out.println("Successfully loaded " + ballPit.getName() + ".\n");
+            runSandboxMenu();
+        } catch (IOException e) {
+            System.out.println("That ball pit doesn't exist!\n");
+        }
+    }
+
+    // EFFECTS: prints the names of each Ball Pit in a list of Ball Pits
+    protected void printBallPits(List<BallPit> pits) {
+        for (int i = 0; i < pits.size(); ++i) {
+            System.out.println("\t#" + (i + 1) + ": " + pits.get(i).getName());
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: selects use command in main menu
+    protected void processSandboxMenuInput(String input) {
+        switch (input) {
+            case "a":
+                processAddBall();
+                break;
+            case "d":
+                processDeleteBall();
+                break;
+            case "v":
+                processViewBalls();
+                break;
+            case "p":
+                processAdvancePit();
+                break;
+            case "c":
+                processClear();
+                break;
+            case "s":
+                processSavePit();
+                break;
+            default:
+                System.out.println("Invalid input.\n");
+        }
+    }
+
+    // EFFECTS: prints main menu options
+    protected void printSandboxMenuOptions() {
+        System.out.println("You are inside " + ballPit.getName() + ". Enter command...\n");
+        System.out.println("\t[a] - add ball");
+        System.out.println("\t[d] - delete ball");
+        System.out.println("\t[v] - view balls");
+        System.out.println("\t[p] - advance ball pit");
+        System.out.println("\t[c] - clear balls from ball pit");
+        System.out.println("\t[s] - save ball pit");
+        System.out.println("\t[q] - quit ball pit\n");
+    }
+
+    // MODIFIES: this
+    // EFFECTS: processes user request to add ball
+    protected void processAddBall() {
+        double mass;
+        System.out.println("How heavy would you like your ball to be? "
+                + "Enter mass (kg) ...\n");
+        mass = input.nextDouble();
+
+        double radius;
+        System.out.println("What radius would you like your ball to be? "
+                + "Enter radius (m)...\n");
+        radius = input.nextDouble();
+
+        Ball inputBall = new Ball(mass, radius);
+        ballPit.addBall(inputBall);
+        System.out.println("Ball successfully added!\n");
+    }
+
+    // MODIFIES: this
+    // EFFECTS: processes user request to add ball
+    protected void processDeleteBall() {
+        printInfo();
+        if (getBallPit().getBalls().size() == 0) {
+            System.out.println("Can't delete any balls if there are none.\n ");
+            return;
+        }
+        System.out.println("Which ball would you like to delete? Enter ball number...\n");
+        int index;
+        index = input.nextInt();
+        if (getBallByIndex(index) != null) {
+            deleteBall(Objects.requireNonNull(getBallByIndex(index)));
+            System.out.println("Successfully deleted Ball #" + index + ".\n");
+        } else {
+            System.out.println("Unsuccessful deleting. Perhaps the ball isn't in the pit? ");
+        }
+
+    }
+
+    // EFFECTS: processes user request to view ball;
+    protected void processViewBalls() {
         printInfo();
     }
 
     // MODIFIES: this
-    // EFFECTS: plays the remove demo
-    public void removeDemo() {
-        System.out.println("\n Here is a demo illustrating that we can remove balls from the ball pit. ");
-        System.out.println("Particularly, this is my third story. \n");
-
-        deleteBall(ballPit.getBalls().get(3));
-        printInfo();
-
-        System.out.println("We can see that ball #4 was removed. ");
-        System.out.println("We can even remove all the balls at once! See: \n");
-
-        clearWindow();
-        printInfo();
+    // EFFECTS: processes user request to advance ball pit;
+    protected void processAdvancePit() {
+        double secs;
+        System.out.println("How many seconds would you like to advance ball pit by? "
+                + "Enter seconds...\n");
+        secs = input.nextDouble();
+        advanceBallPit(secs);
     }
 
     // MODIFIES: this
-    // EFFECTS: plays the interact demo
-    public void interactDemo() {
-        System.out.println("\n For the final demo, we will demonstrate that"
-                + " the balls can interact with each other and the walls! ");
-        System.out.println("Particularly, this is my fourth and final story. \n");
-
-        Ball b5 = new Ball(30, 0.3);
-
-        addBall(b5);
-        advanceBallPit(5);
-
-        System.out.println("\n Observe that as the ball reaches the bottom of the screen,"
-                + " it bounces back up. \n");
-
-        ballPit.clearBallPit();
-
-        Ball b6 = new Ball(20, 3.1, 5.0, 0.5);
-        Ball b7 = new Ball(8, 2.9, 4.0, 0.75);
-        Ball b8 = new Ball(100, 3, 6, 1.5);
-
-        addBall(b6);
-        addBall(b7);
-        addBall(b8);
-
-        advanceBallPit(5);
-
-        System.out.println("\n The balls collided with each other,"
-                + " bouncing away from each other, obeying the conservation"
-                + " laws of momentum. \n");
-
-        System.out.println("That concludes my demo! ");
-
+    // EFFECTS: processes user request to add ball
+    protected void processClear() {
+        if (ballPit.getBalls().size() > 0) {
+            ballPit.clearBallPit();
+            System.out.println("Ball pit successfully cleared.\n");
+        } else {
+            System.out.println("There are already no balls in the pit!\n");
+        }
     }
 
+    // EFFECTS: processes user request to save current ball pit
+    protected void processSavePit() {
+        try {
+            System.out.println("Attempting to save " + ballPit.getName() + "...\n");
+            Writer writer = new Writer(new File(BALLPITS_FILE));
+            writer.write(ballPit);
+            writer.close();
+            System.out.println("Successfully saved Ball Pit " + ballPit.getName()
+                    + " to " + BALLPITS_FILE);
+        } catch (FileNotFoundException e) {
+            System.out.println("ERROR: file not found");
+        } catch (UnsupportedEncodingException e) {
+            System.out.println("ERROR: unsupported encoding");
+            e.printStackTrace();
+        }
+    }
 
     // EFFECTS: prints information relating to the matter in the BallPit
-    public void printInfo() {
+    protected void printInfo() {
         if (ballPit.getBalls().size() == 0) {
             System.out.println("There are no balls in the pit! Why not add some? \n");
             return;
         }
         for (Ball m : ballPit.getBalls()) {
+            System.out.println();
             System.out.println("Ball #" + m.getIndex() + ": at ("
                     + round.format(m.getPosX()) + ", " + round.format(m.getPosY()) + ") m.");
             System.out.println("Mass: " + round.format(m.getMass()) + " kg.");
@@ -134,7 +303,7 @@ public class BallPitWindow {
     // EFFECTS: prints out the coordinates of the balls
     // SOURCE: https://stackoverflow.com/questions/699878/is-there-an-easy-way-to-output-two-columns-to-the-console-in-java
     //         for print formatting
-    public void printCoords() {
+    protected void printCoords() {
         for (Ball b : ballPit.getBalls()) {
             System.out.printf("%-20s \t",
                     "#" + b.getIndex() + ": "
@@ -152,14 +321,14 @@ public class BallPitWindow {
 
     // MODIFIES: this
     // EFFECTS: clears the ball pit
-    public void clearWindow() {
+    protected void clearWindow() {
         System.out.println("Clearing window... \n");
         ballPit.clearBallPit();
     }
 
     // MODIFIES: this
     // EFFECTS: advances BallPit by specified amount of seconds
-    public void advanceBallPit(int s) {
+    protected void advanceBallPit(double s) {
         System.out.println("\n Advancing state. Printing coordinates: \n");
         for (int i = 0; i < s / BallPit.tickRate; ++i) {
             if (i % 5 == 0) {
@@ -170,6 +339,7 @@ public class BallPitWindow {
         System.out.println("\n Here are the balls after " + s + " seconds:\n");
         printInfo();
     }
+
 
     // MODIFIES: this
     // EFFECTS: uses the add tool to add a ball to the BallPit.
@@ -185,8 +355,23 @@ public class BallPitWindow {
         ballPit.removeBall(b);
     }
 
+    // EFFECTS: gets ball by index
+    private Ball getBallByIndex(int index) {
+        for (Ball b : ballPit.getBalls()) {
+            if (b.getIndex() == index) {
+                return b;
+            }
+        }
+        return null;
+    }
+
     // EFFECTS: prints out a welcome message once ball pit is created
     public void welcomeMessage() {
         System.out.println("Welcome to the Ball Pit! \n");
+    }
+
+    // EFFECTS: prints out a goodbye message once ball pit is created
+    public void goodbyeMessage() {
+        System.out.println("See you next time! \n");
     }
 }
