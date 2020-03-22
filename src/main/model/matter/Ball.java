@@ -28,7 +28,7 @@ public class Ball extends Matter {
     protected static int nextIndex = 1;
     protected int index;
 
-    protected static final int LAUNCH_RATIO = 20;
+    public static final int LAUNCH_RATIO = 20;
     protected static final double BUFFER_DIST = 0.03;
 
     private double radius;

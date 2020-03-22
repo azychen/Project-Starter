@@ -339,7 +339,7 @@ public class BallPitWindow {
     // EFFECTS: advances BallPit by specified amount of seconds
     protected void advanceBallPit(double s) {
         System.out.println("\n Advancing state. Printing coordinates: \n");
-        for (int i = 0; i < s / BallPit.tickRate; ++i) {
+        for (int i = 0; i < s / BallPit.TICK_RATE; ++i) {
             if (i % 5 == 0) {
                 printCoords();
             }

@@ -5,22 +5,12 @@ import persistence.Reader;
 import persistence.Saveable;
 import ui.Main;
 
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import java.io.File;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-
 import static java.lang.Math.abs;
-import static java.lang.Math.sqrt;
 import static model.matter.Matter.conserved;
 
 
@@ -33,12 +23,13 @@ import static model.matter.Matter.conserved;
 public class BallPit implements Saveable {
 
     // CONSTANTS
-    public static final double pixelsToMeters = 0.01;
-    public static final double tickRate = 0.03;  // about 60 frames per second
-    public static final double gravity = -9.81;
+    public static final double PIXELS_TO_METERS = 0.01;
+    public static final double TICK_RATE = 0.03;  // about 60 frames per second
+    public static final double GRAVITY = -9.81;
     public static final double WIDTH = 12.0;
     public static final double HEIGHT = 8.0;
     public static final double LOWER_SPEED_LIMIT = 1.5;
+    public static final double EARTHQUAKE_SPEED = 10;
 
     private List<Ball> balls;
     private String name;
@@ -128,14 +119,14 @@ public class BallPit implements Saveable {
     public void slowBalls() {
         for (Ball b : balls) {
             if (b.getSpeedY() > 0) {
-                b.setSpeedY(b.getSpeedY() - (1 - conserved) * tickRate);
+                b.setSpeedY(b.getSpeedY() - (1 - conserved) * TICK_RATE);
             } else if (b.getSpeedY() < 0) {
-                b.setSpeedY(b.getSpeedY() + (1 - conserved) * tickRate);
+                b.setSpeedY(b.getSpeedY() + (1 - conserved) * TICK_RATE);
             }
             if (b.getSpeedX() > 0) {
-                b.setSpeedX(b.getSpeedX() - (1 - conserved) * tickRate);
+                b.setSpeedX(b.getSpeedX() - (1 - conserved) * TICK_RATE);
             } else if (b.getSpeedX() < 0) {
-                b.setSpeedX(b.getSpeedX() + (1 - conserved) * tickRate);
+                b.setSpeedX(b.getSpeedX() + (1 - conserved) * TICK_RATE);
             }
         }
     }
@@ -154,8 +145,8 @@ public class BallPit implements Saveable {
     //          The function for displacement as a function of time is:
     //          x(t) = x_0 + vt + 1/2*at^2, where a = g;
     private void moveBall(Ball s) {
-        s.setPosX(s.getPosX() + s.getSpeedX() * tickRate);
-        s.setPosY(s.getPosY() + s.getSpeedY() * tickRate);
+        s.setPosX(s.getPosX() + s.getSpeedX() * TICK_RATE);
+        s.setPosY(s.getPosY() + s.getSpeedY() * TICK_RATE);
     }
 
     // MODIFIES: this
@@ -168,7 +159,7 @@ public class BallPit implements Saveable {
                 b.setPosY(b.getRadius());
                 b.setSpeedY(0);
             } else {
-                b.setSpeedY(b.getSpeedY() + gravity * tickRate);
+                b.setSpeedY(b.getSpeedY() + GRAVITY * TICK_RATE);
             }
         }
     }
@@ -293,19 +284,19 @@ public class BallPit implements Saveable {
 
     // EFFECTS: returns value in terms of pixels
     public static int toPixels(double val) {
-        return (int) (val / pixelsToMeters);
+        return (int) (val / PIXELS_TO_METERS);
     }
 
     // EFFECTS: returns value in meters
     public static double toMeters(int pix) {
-        return pix * pixelsToMeters;
+        return pix * PIXELS_TO_METERS;
     }
 
     // MODIFIES: this
     // EFFECTS: bounces all balls up
     public void earthquakeUp() {
         for (Ball b : balls) {
-            b.setSpeedY(b.getSpeedY() + 10);
+            b.setSpeedY(b.getSpeedY() + EARTHQUAKE_SPEED);
         }
     }
 
@@ -313,7 +304,7 @@ public class BallPit implements Saveable {
     // EFFECTS: bounces all balls down
     public void earthquakeDown() {
         for (Ball b : balls) {
-            b.setSpeedY(b.getSpeedY() - 10);
+            b.setSpeedY(b.getSpeedY() - EARTHQUAKE_SPEED);
         }
     }
 
@@ -321,7 +312,7 @@ public class BallPit implements Saveable {
     // EFFECTS: bounces all balls right
     public void earthquakeRight() {
         for (Ball b : balls) {
-            b.setSpeedX(b.getSpeedX() + 10);
+            b.setSpeedX(b.getSpeedX() + EARTHQUAKE_SPEED);
         }
     }
 
@@ -329,7 +320,7 @@ public class BallPit implements Saveable {
     // EFFECTS: bounces all balls left
     public void earthquakeLeft() {
         for (Ball b : balls) {
-            b.setSpeedX(b.getSpeedX() - 10);
+            b.setSpeedX(b.getSpeedX() - EARTHQUAKE_SPEED);
         }
     }
 

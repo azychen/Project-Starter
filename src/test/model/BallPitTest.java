@@ -120,8 +120,8 @@ public class BallPitTest {
         assertEquals(1, nsb2.getPosY(), 0.03);
         assertEquals(0, nsb1.getSpeedX());
         assertEquals(0, nsb2.getSpeedX());
-        assertEquals(0.2 * Ball.conserved, nsb1.getSpeedY(), 0.03);
-        assertEquals(0.2 * Ball.conserved, nsb2.getSpeedY(), 0.03);
+        assertEquals(0, nsb1.getSpeedY(), 0.03);
+        assertEquals(0, nsb2.getSpeedY(), 0.03);
     }
 
 
@@ -130,10 +130,10 @@ public class BallPitTest {
     public void testMoveBalls() {
         testPit.nextState();
 
-        assertEquals(-9.81*BallPit.tickRate, testPit.getBalls().get(0).getSpeedY(), 0.01);
+        assertEquals(-0.2838, testPit.getBalls().get(0).getSpeedY(), 0.01);
         assertEquals(0, testPit.getBalls().get(0).getSpeedX(), 0.01);
 
-        assertEquals(-9.81*BallPit.tickRate, testPit.getBalls().get(1).getSpeedY(), 0.01);
+        assertEquals(-0.2838, testPit.getBalls().get(1).getSpeedY(), 0.01);
         assertEquals(0, testPit.getBalls().get(1).getSpeedX(), 0.01);
     }
 
@@ -167,8 +167,101 @@ public class BallPitTest {
     }
 
     @Test
-    public void testSave() {
-
+    void testEarthquakeUp() {
+        testPit.clearBallPit();
+        Ball b1 = new Ball(1, 1, 1, 1);
+        testPit.addBall(b1);
+        testPit.earthquakeUp();
+        assertEquals(BallPit.EARTHQUAKE_SPEED, b1.getSpeedY());
+        assertEquals(0, b1.getSpeedX());
     }
 
+    @Test
+    void testEarthquakeDown() {
+        testPit.clearBallPit();
+        Ball b1 = new Ball(1, 1, 1, 1);
+        testPit.addBall(b1);
+        testPit.earthquakeDown();
+        assertEquals(-BallPit.EARTHQUAKE_SPEED, b1.getSpeedY());
+        assertEquals(0, b1.getSpeedX());
+    }
+
+    @Test
+    void testEarthquakeRight() {
+        testPit.clearBallPit();
+        Ball b1 = new Ball(1, 1, 1, 1);
+        testPit.addBall(b1);
+        testPit.earthquakeRight();
+        assertEquals(BallPit.EARTHQUAKE_SPEED, b1.getSpeedX());
+        assertEquals(0, b1.getSpeedY());
+    }
+
+    @Test
+    void testEarthquakeLeft() {
+        testPit.clearBallPit();
+        Ball b1 = new Ball(1, 1, 1, 1);
+        testPit.addBall(b1);
+        testPit.earthquakeLeft();
+        assertEquals(-BallPit.EARTHQUAKE_SPEED, b1.getSpeedX());
+        assertEquals(0, b1.getSpeedY());
+    }
+
+    @Test
+    void testLaunchNotInside() {
+        testPit.clearBallPit();
+        Ball b1 = new Ball(1, 1, 1, 1);
+        testPit.addBall(b1);
+        testPit.launch(5, 5);
+        assertEquals(0, b1.getSpeedX());
+        assertEquals(0, b1.getSpeedY());
+    }
+
+    @Test
+    void testLaunchInside() {
+        testPit.clearBallPit();
+        Ball b1 = new Ball(1, 1, 1, 1);
+        testPit.addBall(b1);
+        testPit.launch(1, 0.001);
+        assertEquals(0, b1.getSpeedX());
+        assertEquals(Ball.LAUNCH_RATIO, b1.getSpeedY(), 0.1);
+    }
+
+    @Test
+    void testSlowBall() {
+        testPit.clearBallPit();
+        Ball b = new Ball(1, 1, 1, 1, 1, 1, 1);
+        testPit.addBall(b);
+        testPit.slowBalls();
+        assertEquals(0.9895, b.getSpeedX());
+        assertEquals(0.9895, b.getSpeedY());
+    }
+
+    @Test
+    void testToPixels() {
+        assertEquals(100, BallPit.toPixels(1));
+    }
+
+    @Test
+    void testToMeters() {
+        assertEquals(1, BallPit.toMeters(100));
+    }
+
+    @Test
+    public void testConstructorMassAndRadius() {
+        Ball b = new Ball(1, 1);
+        assertEquals(1, b.getMass());
+        assertEquals(1, b.getRadius());
+        assertEquals(0, b.getSpeedX());
+        assertEquals(0, b.getSpeedY());
+    }
+
+    @Test
+    public void testConstructorMassRadiusAndColor() {
+        Ball b = new Ball(1, 1, Color.RED);
+        assertEquals(1, b.getMass());
+        assertEquals(1, b.getRadius());
+        assertEquals(0, b.getSpeedX());
+        assertEquals(0, b.getSpeedY());
+        assertEquals(Color.RED, b.getColor());
+    }
 }

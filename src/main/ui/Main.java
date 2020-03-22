@@ -301,7 +301,7 @@ public class Main extends JFrame {
     // MODIFIES: this
     // EFFECTS: adds timer to frame
     private void addTimer() {
-        timer = new Timer((int) (BallPit.tickRate * 200),
+        timer = new Timer((int) (BallPit.TICK_RATE * 200),
                 e -> {
                     pp.getPit().nextState();
                     pp.repaint();
