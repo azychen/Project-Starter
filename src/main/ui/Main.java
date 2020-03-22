@@ -239,19 +239,36 @@ public class Main extends JFrame {
     // MODIFIES: this
     // EFFECTS: handles key presses
     public void handleKeyPress(int keyCode) {
+        if (!handleEarthquake(keyCode)) {
+            handleSettings(keyCode);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: handles "earthquake" key binds
+    private boolean handleEarthquake(int keyCode) {
         switch (keyCode) {
             case KeyEvent.VK_LEFT:
                 pp.getPit().earthquakeLeft();
-                break;
+                return true;
             case KeyEvent.VK_RIGHT:
                 pp.getPit().earthquakeRight();
-                break;
+                return true;
             case KeyEvent.VK_UP:
                 pp.getPit().earthquakeUp();
-                break;
+                return true;
             case KeyEvent.VK_DOWN:
                 pp.getPit().earthquakeDown();
-                break;
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: handles settings key binds
+    private void handleSettings(int keyCode) {
+        switch (keyCode) {
             case KeyEvent.VK_C:
                 pp.handleClearPit();
                 break;

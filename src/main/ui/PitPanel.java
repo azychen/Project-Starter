@@ -33,8 +33,6 @@ public class PitPanel extends JPanel {
     private static final Color backgroundColor = Color.LIGHT_GRAY;
     private static final Font font = new Font("Helvetica Neue", Font.BOLD, 30);
 
-    private MouseListener ml;
-
     // EFFECTS: constructs panel illustrating ball pit
     public PitPanel(BallPit pit, Main main) {
         this.pit = pit;
@@ -166,12 +164,14 @@ public class PitPanel extends JPanel {
                 null,
                 null,
                 "My Ball Pit");
-        pit.setName(newName);
-        pitName.setText(newName);
-        JOptionPane.showMessageDialog(null,
-                oldName + " was renamed to " + pit.getName() + ".",
-                "Success!",
-                JOptionPane.PLAIN_MESSAGE);
+        if (newName != null) {
+            pit.setName(newName);
+            pitName.setText(newName);
+            JOptionPane.showMessageDialog(null,
+                    oldName + " was renamed to " + pit.getName() + ".",
+                    "Success!",
+                    JOptionPane.PLAIN_MESSAGE);
+        }
     }
 
     // MODIFIES: this
@@ -265,12 +265,10 @@ public class PitPanel extends JPanel {
         slider.setPaintTicks(true);
         slider.setPaintLabels(true);
         slider.setValue(0);
-        ChangeListener changeListener = new ChangeListener() {
-            public void stateChanged(ChangeEvent changeEvent) {
-                JSlider theSlider = (JSlider) changeEvent.getSource();
-                if (!theSlider.getValueIsAdjusting()) {
-                    optionPane.setInputValue(theSlider.getValue());
-                }
+        ChangeListener changeListener = changeEvent -> {
+            JSlider theSlider = (JSlider) changeEvent.getSource();
+            if (!theSlider.getValueIsAdjusting()) {
+                optionPane.setInputValue(theSlider.getValue());
             }
         };
         slider.addChangeListener(changeListener);
