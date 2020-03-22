@@ -2,7 +2,7 @@ package ui;
 
 import model.matter.Ball;
 
-public class Demo extends BallPitWindow {
+public class Demo extends BallPitWindowConsole {
     /*
      *         D E M O S
      */

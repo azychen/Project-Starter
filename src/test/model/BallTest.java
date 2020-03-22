@@ -37,7 +37,7 @@ public class BallTest {
         assertEquals(Ball.defaultMass, s1.getMass());
         assertEquals(0, s1.getSpeedX());
         assertEquals(0, s1.getSpeedY());
-        assertEquals(Ball.PI * Matter.depth, s1.getVolume(), 0.01);
+        assertEquals(0.19634954084375, s1.getVolume(), 0.01);
     }
 
     @Test
@@ -86,7 +86,7 @@ public class BallTest {
 
     @Test
     void testGetRadius() {
-        assertEquals(1, s1.getRadius());
+        assertEquals(0.25, s1.getRadius());
         assertEquals(10, s2.getRadius());
     }
 
@@ -98,13 +98,13 @@ public class BallTest {
 
     @Test
     void testGetVolume() {
-        assertEquals(Ball.PI * Matter.depth, s1.getVolume(), 0.01);
+        assertEquals(0.19634954084375, s1.getVolume(), 0.01);
         assertEquals(Ball.PI * 10 * 10 * Matter.depth, s2.getVolume(), 0.01);
     }
 
     @Test
     void testGetDensity() {
-        assertEquals(5 / (Ball.PI * Matter.depth), s1.getDensity(), 0.01);
+        assertEquals(25.46479089543109, s1.getDensity(), 0.01);
         assertEquals(10 / (Ball.PI * 10 * 10 * Matter.depth), s2.getDensity(), 0.01);
     }
 
@@ -145,9 +145,9 @@ public class BallTest {
         s8.setSpeedY(2);
         s8.setSpeedX(3);
         s7.bounce(s8);
-        assertEquals(-0.95, s7.getSpeedY(), 0.01);
-        assertEquals(-8 * Ball.conserved, s8.getSpeedY(), 0.01);
-        assertEquals(3 * Ball.conserved, s8.getSpeedX());
+        assertEquals(2.732061902315196, s7.getSpeedY(), 0.01);
+        assertEquals(-3.63, s8.getSpeedY(), 0.01);
+        assertEquals(0, s8.getSpeedX(), 0.01);
     }
 
     @Test
@@ -158,9 +158,9 @@ public class BallTest {
         s10.setSpeedX(-3);
         s9.setSpeedY(-1);
         s9.bounce(s10);
-        assertEquals(-4.8 * Ball.conserved, s9.getSpeedX());
-        assertEquals(-1 * Ball.conserved, s9.getSpeedY());
-        assertEquals(4.2 * Ball.conserved, s10.getSpeedX());
+        assertEquals(-1.5492408710612318, s9.getSpeedX());
+        assertEquals(0, s9.getSpeedY(), 0.01);
+        assertEquals(3.55, s10.getSpeedX(), 0.01);
 
     }
 
@@ -173,10 +173,10 @@ public class BallTest {
         s12.setSpeedX(-1);
         s12.setSpeedY(-3);
         s11.bounce(s12);
-        assertEquals(-2.692855, s11.getSpeedX(), 0.01);
-        assertEquals(-1.554720, s11.getSpeedY(), 0.01);
-        assertEquals(3.057547, s12.getSpeedX(), 0.01);
-        assertEquals(1.762755, s12.getSpeedY(), 0.01);
+        assertEquals(-1.8424798213842304, s11.getSpeedX(), 0.01);
+        assertEquals(-1.06375622063205, s11.getSpeedY(), 0.01);
+        assertEquals(2.092005858876402, s12.getSpeedX(), 0.01);
+        assertEquals(1.207820145768565, s12.getSpeedY(), 0.01);
     }
 
     @Test
@@ -188,10 +188,22 @@ public class BallTest {
         s12.setSpeedX(-1);
         s12.setSpeedY(-3);
         s12.bounce(s11);
-        assertEquals(-2.692855, s11.getSpeedX(), 0.01);
-        assertEquals(-1.554720, s11.getSpeedY(), 0.01);
-        assertEquals(3.057547, s12.getSpeedX(), 0.01);
-        assertEquals(1.762755, s12.getSpeedY(), 0.01);
+        assertEquals(-1.8424798213842304, s11.getSpeedX(), 0.01);
+        assertEquals(-1.06375622063205, s11.getSpeedY(), 0.01);
+        assertEquals(2.092005858876402, s12.getSpeedX(), 0.01);
+        assertEquals(1.207820145768565, s12.getSpeedY(), 0.01);
+    }
+
+    @Test
+    void testInside() {
+        Ball b1 = new Ball(1.0, 1.0, 1.0, 1.0);
+        assertTrue(b1.inside(1.0, 1.0));
+    }
+
+    @Test
+    void testInsideNotInside() {
+        Ball b1 = new Ball(1.0, 1.0, 1.0, 1.0);
+        assertFalse(b1.inside(5.0, 5.0));
     }
 
 

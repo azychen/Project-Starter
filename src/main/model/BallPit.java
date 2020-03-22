@@ -3,12 +3,27 @@ package model;
 import model.matter.Ball;
 import persistence.Reader;
 import persistence.Saveable;
+import ui.Main;
 
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
+import java.io.File;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
+import static java.lang.Math.abs;
+import static java.lang.Math.sqrt;
 import static model.matter.Matter.conserved;
+
+
 
 /*
  *      This class represents the environment containing all the Balls.
@@ -19,10 +34,11 @@ public class BallPit implements Saveable {
 
     // CONSTANTS
     public static final double pixelsToMeters = 0.01;
-    public static final double tickRate = 0.02;         // 50 frames per second
+    public static final double tickRate = 0.03;  // about 60 frames per second
     public static final double gravity = -9.81;
     public static final double WIDTH = 12.0;
     public static final double HEIGHT = 8.0;
+    public static final double LOWER_SPEED_LIMIT = 1.5;
 
     private List<Ball> balls;
     private String name;
@@ -46,6 +62,17 @@ public class BallPit implements Saveable {
         this.name = name;
     }
 
+    // MODIFIES: this
+    // EFFECTS: adds ball with random mass and radius value
+    public void addRandomBall() {
+        balls.add(new Ball(getRandomNumber(1, 100), getRandomNumber(0.05, 0.5)));
+    }
+
+    // EFFECTS: returns random
+    private static double getRandomNumber(double min, double max) {
+        Random r = new Random();
+        return min + (max - min) * r.nextDouble();
+    }
 
     // EFFECTS: returns the list of Balls int the BallPit
     public List<Ball> getBalls() {
@@ -90,8 +117,27 @@ public class BallPit implements Saveable {
     // EFFECTS: advances to the next frame in the BallPit
     public void nextState() {
         moveBalls();
+        handleGravity();
         handleWalls();
         handleCollisions();
+        slowBalls();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: stops balls which are moving at speed lower than LOWER_SPEED_LIMIT
+    public void slowBalls() {
+        for (Ball b : balls) {
+            if (b.getSpeedY() > 0) {
+                b.setSpeedY(b.getSpeedY() - (1 - conserved) * tickRate);
+            } else if (b.getSpeedY() < 0) {
+                b.setSpeedY(b.getSpeedY() + (1 - conserved) * tickRate);
+            }
+            if (b.getSpeedX() > 0) {
+                b.setSpeedX(b.getSpeedX() - (1 - conserved) * tickRate);
+            } else if (b.getSpeedX() < 0) {
+                b.setSpeedX(b.getSpeedX() + (1 - conserved) * tickRate);
+            }
+        }
     }
 
 
@@ -110,8 +156,23 @@ public class BallPit implements Saveable {
     private void moveBall(Ball s) {
         s.setPosX(s.getPosX() + s.getSpeedX() * tickRate);
         s.setPosY(s.getPosY() + s.getSpeedY() * tickRate);
-        s.setSpeedY(s.getSpeedY() + gravity * tickRate);
     }
+
+    // MODIFIES: this
+    // EFFECTS: moves each ball by gravitational acceleration, unless they are
+    //          touching the ground below a threshold speed.
+    private void handleGravity() {
+        for (Ball b : balls) {
+            if (abs(b.getSpeedY()) < LOWER_SPEED_LIMIT
+                    && b.getPosY() < b.getRadius() + 0.05) {
+                b.setPosY(b.getRadius());
+                b.setSpeedY(0);
+            } else {
+                b.setSpeedY(b.getSpeedY() + gravity * tickRate);
+            }
+        }
+    }
+
 
     // MODIFIES: this
     // EFFECTS: moves Balls accordingly if colliding with other Balls.
@@ -152,6 +213,9 @@ public class BallPit implements Saveable {
         if (b.getPosY() - b.getRadius() <= 0.01) {
             b.setPosY(b.getRadius() + 0.02);
             b.setSpeedY(-b.getSpeedY() * conserved);
+            if (abs(b.getSpeedY()) > 0.1) {
+                playBounceEffect();
+            }
         }
     }
 
@@ -161,6 +225,7 @@ public class BallPit implements Saveable {
         if (b.getPosY() + b.getRadius() >= HEIGHT - 0.01) {
             b.setPosY(HEIGHT - b.getRadius() - 0.02);
             b.setSpeedY(-b.getSpeedY() * conserved);
+            playBounceEffect();
         }
     }
 
@@ -170,6 +235,7 @@ public class BallPit implements Saveable {
         if (b.getPosX() - b.getRadius() <= 0.01) {
             b.setPosX(b.getRadius() + 0.02);
             b.setSpeedX(-b.getSpeedX() * conserved);
+            playBounceEffect();
         }
     }
 
@@ -179,7 +245,14 @@ public class BallPit implements Saveable {
         if (b.getPosX() + b.getRadius() >= WIDTH - 0.01) {
             b.setPosX(WIDTH - b.getRadius() - 0.02);
             b.setSpeedX(-b.getSpeedX() * conserved);
+            playBounceEffect();
         }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: plays bounce sound effect
+    private void playBounceEffect() {
+        Main.playCollisionSound();
     }
 
 
@@ -217,4 +290,55 @@ public class BallPit implements Saveable {
 
         }
     }
+
+    // EFFECTS: returns value in terms of pixels
+    public static int toPixels(double val) {
+        return (int) (val / pixelsToMeters);
+    }
+
+    // EFFECTS: returns value in meters
+    public static double toMeters(int pix) {
+        return pix * pixelsToMeters;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: bounces all balls up
+    public void earthquakeUp() {
+        for (Ball b : balls) {
+            b.setSpeedY(b.getSpeedY() + 10);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: bounces all balls down
+    public void earthquakeDown() {
+        for (Ball b : balls) {
+            b.setSpeedY(b.getSpeedY() - 10);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: bounces all balls right
+    public void earthquakeRight() {
+        for (Ball b : balls) {
+            b.setSpeedX(b.getSpeedX() + 10);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: bounces all balls left
+    public void earthquakeLeft() {
+        for (Ball b : balls) {
+            b.setSpeedX(b.getSpeedX() - 10);
+        }
+    }
+
+    public void launch(double x, double y) {
+        for (Ball b : balls) {
+            if (b.inside(x, y)) {
+                b.launch(x, y);
+            }
+        }
+    }
+
 }

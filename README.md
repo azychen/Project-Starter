@@ -29,6 +29,12 @@ in this field by demonstrating how fun physical phenomena may be.
 Additionally, the prospect of accurately and precisely simulating 
 real-world actions would also quite challenging to me.   
 
+####Instructions for Grader
+ - Step 1: create a new ball pit, or load the saved ball pit when opening the application
+ - Step 2: to add ball to ball pit, click on settings icon, and add ball (or press "A")
+ - Step 3: to trigger audiovisual component, use the arrow keys to make balls collide with each other
+ - Step 4: to save ball pit, click save ball pit in settings. 
+
 
 ####Phase 1: Stories
 As a user, I want to...
@@ -42,3 +48,5 @@ As a user, I want to...
 - [x] _save_ the current state of the sandbox
 - [x] _load_ another sandbox's state
 - [x] _prompt_ the user to save when exiting sandbox
+
+

@@ -1,7 +1,9 @@
 package model.matter;
 
 import model.BallPit;
+import ui.Main;
 
+import java.awt.*;
 import java.util.Random;
 
 import static java.lang.Math.*;
@@ -17,7 +19,7 @@ public class Ball extends Matter {
     public static final double PI = 3.1415926535;
 
     // DEFAULT PARAMETERS
-    private static final double defaultRadius = 1.0;
+    private static final double defaultRadius = 0.25;
     public static final double defaultMass = 5.0;
 
     public static final double defaultPosX = BallPit.WIDTH / 2;
@@ -25,6 +27,9 @@ public class Ball extends Matter {
 
     protected static int nextIndex = 1;
     protected int index;
+
+    protected static final int LAUNCH_RATIO = 20;
+    protected static final double BUFFER_DIST = 0.03;
 
     private double radius;
 
@@ -38,6 +43,20 @@ public class Ball extends Matter {
         speedX = dx;
         speedY = dy;
         index = i;
+        radius = r;
+        volume = getVolume();
+    }
+
+    // REQUIRES: mass > 0
+    // EFFECTS: constructs a Ball with user-defined parameters.
+    public Ball(double m, double x, double y, double r, double dx, double dy, Color c) {
+        color = c;
+        mass = m;
+        posX = x;
+        posY = y;
+        speedX = dx;
+        speedY = dy;
+        index = nextIndex++;
         radius = r;
         volume = getVolume();
     }
@@ -60,6 +79,19 @@ public class Ball extends Matter {
     // EFFECTS: constructs a Ball with user-defined parameters.
     public Ball(double m, double r) {
         super();
+        mass = m;
+        radius = r;
+        setRandomLocation();
+        speedX = 0;
+        speedY = 0;
+        index = nextIndex++;
+        volume = getVolume();
+    }
+
+    // REQUIRES: mass > 0
+    // EFFECTS: constructs a Ball with user-defined parameters.
+    public Ball(double m, double r, Color c) {
+        super(c);
         mass = m;
         radius = r;
         setRandomLocation();
@@ -193,69 +225,62 @@ public class Ball extends Matter {
     // SOURCE: formulas to calculate final velocities was found on Wikipedia:
     //         https://en.wikipedia.org/wiki/Elastic_collision
     public void bounce(Ball c) {
-        if (abs(posX - c.getPosX()) <= 0.01) {
-            bounceOnlyYDimension(c);
-        } else if (abs(posY - c.getPosY()) <= 0.01) {
-            bounceOnlyXDimension(c);
-        } else if (posX < c.getPosX()) {
-            bounceBothDimensions(c);
+        if (posX < c.getPosX()) {
+            handleBounce(c);
         } else {
-            c.bounceBothDimensions(this);
+            c.handleBounce(this);
         }
     }
 
-    // REQUIRES: posY of this and other are equal
-    // MODIFIES: this and other
-    // EFFECTS:  changes velocities of this and other according to a
-    //           one-dimensional collision along the Y axis
-    private void bounceOnlyYDimension(Ball c) {
-        double u1 = speedY;
-        double u2 = c.getSpeedY();
-        double m1 = mass;
-        double m2 = c.getMass();
-        setSpeedY(conserved * (u1 * (m1 - m2) / (m1 + m2)
-                + 2 * u2 * m2 / (m1 + m2)));
-        c.setSpeedY(conserved * (2 * m1 * u1 / (m1 + m2)
-                + u2 * (m2 - m1) / (m1 + m2)));
-        setSpeedX(speedX * conserved);
-        c.setSpeedX(c.getSpeedX() * conserved);
-    }
 
-    // REQUIRES: posY of this and other are equal
-    // MODIFIES: this and other
-    // EFFECTS:  changes velocities of this and other according to a
-    //           one-dimensional collision along the X axis
-    private void bounceOnlyXDimension(Ball c) {
-        double u1 = speedX;
-        double u2 = c.getSpeedX();
-        double m1 = mass;
-        double m2 = c.getMass();
-        setSpeedX(conserved * (u1 * (m1 - m2) / (m1 + m2)
-                + 2 * u2 * m2 / (m1 + m2)));
-        c.setSpeedX(conserved * (2 * m1 * u1 / (m1 + m2)
-                + u2 * (m2 - m1) / (m1 + m2)));
-        setSpeedY(speedY * conserved);
-        c.setSpeedY(c.getSpeedY() * conserved);
-    }
-
-    // REQUIRES: posX != c.getPosX(), this is to the left of other
-    // MODIFIES: this and other
+    // REQUIRES: this is to the left of c
+    // MODIFIES: this, c
     // EFFECTS:  changes velocities of this and other according to a
     //           two-dimensional collision along the X axis
-    private void bounceBothDimensions(Ball c) {
-        double theta = atan((posY - c.getPosY()) / (posX - c.getPosX()));
+    private void handleBounce(Ball c) {
+        Main.playCollisionSound();
+        double theta = (abs(posX - c.getPosX()) <= 0)
+                ? PI / 2 : atan((posY - c.getPosY()) / (posX - c.getPosX()));
         double u1 = getSpeed();
         double u2 = c.getSpeed();
         double m1 = mass;
         double m2 = c.getMass();
-        double v1 = conserved * (u1 * (m1 - m2) / (m1 + m2)
-                    + 2 * u2 * m2 / (m1 + m2));
-        double v2 = conserved * (2 * m1 * u1 / (m1 + m2)
-                    + u2 * (m2 - m1) / (m1 + m2));
+        double v1 = getFirstSpeed(u1, u2, m1, m2);
+        double v2 = getSecondSpeed(u1, u2, m1, m2);
+        setNewSpeeds(v1, v2, theta, c);
+        separateBalls(c);
+    }
+
+    // EFFECTS: returns new speed of first ball after collision
+    private static double getFirstSpeed(double u1, double u2, double m1, double m2) {
+        return conserved * (u1 * (m1 - m2) / (m1 + m2)
+                + 2 * u2 * m2 / (m1 + m2));
+    }
+
+    // EFFECTS: returns new speed of second ball after collision
+    private static double getSecondSpeed(double u1, double u2, double m1, double m2) {
+        return conserved * (2 * m1 * u1 / (m1 + m2)
+                + u2 * (m2 - m1) / (m1 + m2));
+    }
+
+    // EFFECTS: sets new speeds after collision
+    private void setNewSpeeds(double v1, double v2, double theta, Ball c) {
         setSpeedX(v1 * cos(PI + theta));
         setSpeedY(v1 * sin(PI + theta));
         c.setSpeedX(v2 * cos(theta));
         c.setSpeedY(v2 * sin(theta));
+    }
+
+
+    // MODIFIES: this
+    // EFFECTS: separates two balls
+    private void separateBalls(Ball b) {
+        double theta = atan((posY - b.getPosY()) / (posX - b.getPosX()));
+        double overlap = (radius + b.getRadius() - getDistance(b)) / 2;
+        setPosX(posX - overlap * cos(theta) - BUFFER_DIST);
+        setPosY(posY - overlap * sin(theta) - BUFFER_DIST);
+        b.setPosX(b.getPosX() + overlap * cos(theta) + BUFFER_DIST);
+        b.setPosY(b.getPosY() + overlap * sin(theta) + BUFFER_DIST);
     }
 
     // MODIFIES: this
@@ -266,7 +291,16 @@ public class Ball extends Matter {
         setPosY(radius + (BallPit.HEIGHT - radius) * n.nextDouble());
     }
 
+    // EFFECTS: returns true if given coordinate is inside ball
+    public boolean inside(double x, double y) {
+        return sqrt((posX - x) * (posX - x) + (posY - y) * (posY - y)) < radius;
+    }
+
     // MODIFIES: this
-    // EFFECTS: separates the balls
+    // EFFECTS: launches ball based on click location
+    public void launch(double mx, double my) {
+        setSpeedX(speedX + LAUNCH_RATIO * (posX - mx) / radius);
+        setSpeedY(speedY + LAUNCH_RATIO * (posY - my) / radius);
+    }
 
 }

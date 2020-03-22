@@ -14,7 +14,7 @@ public abstract class Matter {
 
     // DEFAULT PARAMETERS
     public static final double depth = 1.0;
-    public static final double conserved = 0.95;
+    public static final double conserved = 0.65;
 
     // COMMON PARAMETERS
     protected Color color;
@@ -34,6 +34,10 @@ public abstract class Matter {
     // SOURCE: https://stackoverflow.com/questions/4246351/creating-random-colour-in-java
     public Matter() {
         color = new Color((int)(random() * 0x1000000));
+    }
+
+    public Matter(Color c) {
+        color = c;
     }
 
 
