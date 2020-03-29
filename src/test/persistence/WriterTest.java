@@ -1,6 +1,7 @@
 package persistence;
 
 import model.BallPit;
+import model.ImpossibleValueException;
 import model.matter.Ball;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,13 +30,18 @@ class WriterTest {
         List<Ball> balls1 = new ArrayList<>();
         List<Ball> balls2 = new ArrayList<>();
 
-        for (int i = 0; i < 5; ++i) {
-            Ball newBall = new Ball(i, i);
-            balls1.add(newBall);
-        }
-        for (int i = 0; i < 20; ++i) {
-            Ball newBall = new Ball(i, i);
-            balls2.add(newBall);
+        try {
+            for (int i = 0; i < 5; ++i) {
+                Ball newBall = new Ball(i + 1, i + 1);
+                balls1.add(newBall);
+            }
+            for (int i = 0; i < 20; ++i) {
+                Ball newBall = new Ball(i + 1, i + 1);
+                balls2.add(newBall);
+            }
+        } catch (ImpossibleValueException e) {
+            fail();
+            e.printStackTrace();
         }
         testBallPit1 = new BallPit("Mae", balls1);
         testBallPit2 = new BallPit("Jo", balls2);
@@ -56,8 +62,8 @@ class WriterTest {
             assertEquals(5, pit1.getBalls().size());
             for (int i = 0; i < pit1.getBalls().size(); ++i) {
                 Ball ball = pit1.getBalls().get(i);
-                assertEquals(i, ball.getRadius());
-                assertEquals(i, ball.getMass());
+                assertEquals(i + 1, ball.getRadius());
+                assertEquals(i + 1, ball.getMass());
 
             }
 
@@ -66,8 +72,8 @@ class WriterTest {
             assertEquals(20, pit2.getBalls().size());
             for (int i = 0; i < pit2.getBalls().size(); ++i) {
                 Ball ball = pit2.getBalls().get(i);
-                assertEquals(i, ball.getRadius());
-                assertEquals(i, ball.getMass());
+                assertEquals(i + 1, ball.getRadius());
+                assertEquals(i + 1, ball.getMass());
             }
 
         } catch (IOException e) {

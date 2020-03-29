@@ -2,6 +2,7 @@ package persistence;
 
 import model.BallPit;
 import model.matter.Ball;
+import model.ImpossibleValueException;
 
 import java.io.File;
 import java.io.IOException;
@@ -72,8 +73,12 @@ public class Reader {
             double dx = Double.parseDouble(components.get(i + 4));
             double dy = Double.parseDouble(components.get(i + 5));
             int index = Integer.parseInt(components.get(i + 6));
-            Ball newBall = new Ball(m, x, y, r, dx, dy, index);
-            balls.add(newBall);
+            try {
+                Ball newBall = new Ball(m, x, y, r, dx, dy, index);
+                balls.add(newBall);
+            } catch (ImpossibleValueException e) {
+                e.printStackTrace();
+            }
         }
         return new BallPit(name, balls);
     }

@@ -36,17 +36,20 @@ real-world actions would also quite challenging to me.
  - Step 4: to save ball pit, click save ball pit in settings. 
 
 
-####Phase 1: Stories
+#### Phase 1: Stories
 As a user, I want to...
 - [x] see the balls _move_
 - [x] _add_ balls to the BallPit
 - [x] _delete_ balls from the BallPit
 - [x] see the balls _interact_ with each other and the environment
 
-####Phase 2: Stories
+#### Phase 2: Stories
 As a user, I want to...
 - [x] _save_ the current state of the sandbox
 - [x] _load_ another sandbox's state
 - [x] _prompt_ the user to save when exiting sandbox
 
+
+#### Phase 4: Task 2
+I chose to design a class such that it is robust. Particularly, I decided to use this on the Ball class, such that balls with impossible mass and radius cannot be constructed. The methods which use this robust design are the constructors which create each ball.
 

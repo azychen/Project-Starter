@@ -1,6 +1,7 @@
 package ui;
 
 import model.BallPit;
+import model.ImpossibleValueException;
 import model.matter.Ball;
 import persistence.Writer;
 
@@ -120,8 +121,13 @@ public class PitPanel extends JPanel {
     public void handleAddBall() {
         double mass = makeSliderPane("mass (g)");
         double radius = makeSliderPane("radius (cm)");
-        Ball b = new Ball(mass * 0.01, radius * 0.01);
-        pit.addBall(b);
+        try {
+            Ball b = new Ball(mass * 0.01, radius * 0.01);
+            pit.addBall(b);
+        } catch (ImpossibleValueException e) {
+            Ball b = new Ball();
+            pit.addBall(b);
+        }
     }
 
     // MODIFIES: this

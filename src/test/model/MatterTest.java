@@ -15,7 +15,12 @@ public class MatterTest {
 
     @BeforeEach
     void setup() {
-        m = new Ball(1, 1, 1, 1, 1, 1, Color.RED);
+        try {
+            m = new Ball(1, 1, 1, 1, 1, 1, Color.RED);
+        } catch (ImpossibleValueException e) {
+            fail();
+            e.printStackTrace();
+        }
     }
 
     @Test

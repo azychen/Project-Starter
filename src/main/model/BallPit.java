@@ -1,6 +1,7 @@
 package model;
 
 import model.matter.Ball;
+import model.ImpossibleValueException;
 import persistence.Reader;
 import persistence.Saveable;
 import ui.Main;
@@ -56,7 +57,11 @@ public class BallPit implements Saveable {
     // MODIFIES: this
     // EFFECTS: adds ball with random mass and radius value
     public void addRandomBall() {
-        balls.add(new Ball(getRandomNumber(1, 100), getRandomNumber(0.05, 0.5)));
+        try {
+            balls.add(new Ball(getRandomNumber(1, 100), getRandomNumber(0.05, 0.5)));
+        } catch (ImpossibleValueException e) {
+            e.printStackTrace();
+        }
     }
 
     // EFFECTS: returns random

@@ -1,6 +1,7 @@
 package model.matter;
 
 import model.BallPit;
+import model.ImpossibleValueException;
 import ui.Main;
 
 import java.awt.*;
@@ -19,7 +20,7 @@ public class Ball extends Matter {
     public static final double PI = 3.1415926535;
 
     // DEFAULT PARAMETERS
-    private static final double defaultRadius = 0.25;
+    public static final double defaultRadius = 0.25;
     public static final double defaultMass = 5.0;
 
     public static final double defaultPosX = BallPit.WIDTH / 2;
@@ -35,8 +36,11 @@ public class Ball extends Matter {
 
     // REQUIRES: mass > 0
     // EFFECTS: constructs a Ball with user-defined parameters.
-    public Ball(double m, double x, double y, double r, double dx, double dy, int i) {
+    public Ball(double m, double x, double y, double r, double dx, double dy, int i) throws ImpossibleValueException {
         super();
+        if (m <= 0 || r <= 0) {
+            throw new ImpossibleValueException();
+        }
         mass = m;
         posX = x;
         posY = y;
@@ -49,8 +53,11 @@ public class Ball extends Matter {
 
     // REQUIRES: mass > 0
     // EFFECTS: constructs a Ball with user-defined parameters.
-    public Ball(double m, double x, double y, double r, double dx, double dy, Color c) {
+    public Ball(double m, double x, double y, double r, double dx, double dy, Color c) throws ImpossibleValueException {
         color = c;
+        if (m <= 0 || r <= 0) {
+            throw new ImpossibleValueException();
+        }
         mass = m;
         posX = x;
         posY = y;
@@ -63,8 +70,11 @@ public class Ball extends Matter {
 
     // REQUIRES: mass > 0
     // EFFECTS: constructs a Ball with user-defined parameters.
-    public Ball(double m, double x, double y, double r) {
+    public Ball(double m, double x, double y, double r) throws ImpossibleValueException {
         super();
+        if (m <= 0 || r <= 0) {
+            throw new ImpossibleValueException();
+        }
         mass = m;
         posX = x;
         posY = y;
@@ -77,8 +87,11 @@ public class Ball extends Matter {
 
     // REQUIRES: mass > 0
     // EFFECTS: constructs a Ball with user-defined parameters.
-    public Ball(double m, double r) {
+    public Ball(double m, double r) throws ImpossibleValueException {
         super();
+        if (m <= 0 || r <= 0) {
+            throw new ImpossibleValueException();
+        }
         mass = m;
         radius = r;
         setRandomLocation();
@@ -90,8 +103,11 @@ public class Ball extends Matter {
 
     // REQUIRES: mass > 0
     // EFFECTS: constructs a Ball with user-defined parameters.
-    public Ball(double m, double r, Color c) {
+    public Ball(double m, double r, Color c) throws ImpossibleValueException {
         super(c);
+        if (m <= 0 || r <= 0) {
+            throw new ImpossibleValueException();
+        }
         mass = m;
         radius = r;
         setRandomLocation();

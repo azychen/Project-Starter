@@ -28,7 +28,12 @@ public class BallPitTest {
     public void setup() {
         testPit = new BallPit("Anton's Ball Pit");
         b1 = new Ball();
-        b2 = new Ball(8, 2.0, 2.0, 0.2);
+        try {
+            b2 = new Ball(8, 2.0, 2.0, 0.2);
+        } catch (ImpossibleValueException e) {
+            fail();
+            e.printStackTrace();
+        }
         testPit.addBall(b1);
         testPit.addBall(b2);
         b3 = new Ball();
@@ -109,19 +114,24 @@ public class BallPitTest {
     @Test
     public void testNextStateMultipleBallsCollision() {
         testPit.clearBallPit();
-        Ball nsb1 = new Ball(20, 3, 1, 1);
-        Ball nsb2 = new Ball(20, 5, 1, 1);
-        testPit.addBall(nsb1);
-        testPit.addBall(nsb2);
-        testPit.nextState();
-        assertEquals(3, nsb1.getPosX(), 0.03);
-        assertEquals(5, nsb2.getPosX(), 0.03);
-        assertEquals(1, nsb1.getPosY(), 0.03);
-        assertEquals(1, nsb2.getPosY(), 0.03);
-        assertEquals(0, nsb1.getSpeedX());
-        assertEquals(0, nsb2.getSpeedX());
-        assertEquals(0, nsb1.getSpeedY(), 0.03);
-        assertEquals(0, nsb2.getSpeedY(), 0.03);
+        try {
+            Ball nsb1 = new Ball(20, 3, 1, 1);
+            Ball nsb2 = new Ball(20, 5, 1, 1);
+            testPit.addBall(nsb1);
+            testPit.addBall(nsb2);
+            testPit.nextState();
+            assertEquals(3, nsb1.getPosX(), 0.03);
+            assertEquals(5, nsb2.getPosX(), 0.03);
+            assertEquals(1, nsb1.getPosY(), 0.03);
+            assertEquals(1, nsb2.getPosY(), 0.03);
+            assertEquals(0, nsb1.getSpeedX());
+            assertEquals(0, nsb2.getSpeedX());
+            assertEquals(0, nsb1.getSpeedY(), 0.03);
+            assertEquals(0, nsb2.getSpeedY(), 0.03);
+        } catch (ImpossibleValueException e) {
+            fail();
+            e.printStackTrace();
+        }
     }
 
 
@@ -140,7 +150,13 @@ public class BallPitTest {
     @Test
     public void testHandleWallsBottomLeft() {
         testPit.clearBallPit();
-        Ball b4 = new Ball(20, 0.0, 0.0, 1);
+        Ball b4 = null;
+        try {
+            b4 = new Ball(20, 0.0, 0.0, 1);
+        } catch (ImpossibleValueException e) {
+            fail();
+            e.printStackTrace();
+        }
         testPit.addBall(b4);
         testPit.addBall(b2);
         testPit.nextState();
@@ -155,7 +171,13 @@ public class BallPitTest {
     @Test
     public void testHandleWallsTopRight() {
         testPit.clearBallPit();
-        Ball b5 = new Ball(20, BallPit.WIDTH, BallPit.HEIGHT, 1);
+        Ball b5 = null;
+        try {
+            b5 = new Ball(20, BallPit.WIDTH, BallPit.HEIGHT, 1);
+        } catch (ImpossibleValueException e) {
+            fail();
+            e.printStackTrace();
+        }
         testPit.addBall(b5);
         testPit.addBall(b2);
         testPit.nextState();
@@ -169,7 +191,13 @@ public class BallPitTest {
     @Test
     void testEarthquakeUp() {
         testPit.clearBallPit();
-        Ball b1 = new Ball(1, 1, 1, 1);
+        Ball b1 = null;
+        try {
+            b1 = new Ball(1, 1, 1, 1);
+        } catch (ImpossibleValueException e) {
+            fail();
+            e.printStackTrace();
+        }
         testPit.addBall(b1);
         testPit.earthquakeUp();
         assertEquals(BallPit.EARTHQUAKE_SPEED, b1.getSpeedY());
@@ -179,7 +207,13 @@ public class BallPitTest {
     @Test
     void testEarthquakeDown() {
         testPit.clearBallPit();
-        Ball b1 = new Ball(1, 1, 1, 1);
+        Ball b1 = null;
+        try {
+            b1 = new Ball(1, 1, 1, 1);
+        } catch (ImpossibleValueException e) {
+            fail();
+            e.printStackTrace();
+        }
         testPit.addBall(b1);
         testPit.earthquakeDown();
         assertEquals(-BallPit.EARTHQUAKE_SPEED, b1.getSpeedY());
@@ -189,7 +223,13 @@ public class BallPitTest {
     @Test
     void testEarthquakeRight() {
         testPit.clearBallPit();
-        Ball b1 = new Ball(1, 1, 1, 1);
+        Ball b1 = null;
+        try {
+            b1 = new Ball(1, 1, 1, 1);
+        } catch (ImpossibleValueException e) {
+            fail();
+            e.printStackTrace();
+        }
         testPit.addBall(b1);
         testPit.earthquakeRight();
         assertEquals(BallPit.EARTHQUAKE_SPEED, b1.getSpeedX());
@@ -199,7 +239,13 @@ public class BallPitTest {
     @Test
     void testEarthquakeLeft() {
         testPit.clearBallPit();
-        Ball b1 = new Ball(1, 1, 1, 1);
+        Ball b1 = null;
+        try {
+            b1 = new Ball(1, 1, 1, 1);
+        } catch (ImpossibleValueException e) {
+            fail();
+            e.printStackTrace();
+        }
         testPit.addBall(b1);
         testPit.earthquakeLeft();
         assertEquals(-BallPit.EARTHQUAKE_SPEED, b1.getSpeedX());
@@ -209,7 +255,13 @@ public class BallPitTest {
     @Test
     void testLaunchNotInside() {
         testPit.clearBallPit();
-        Ball b1 = new Ball(1, 1, 1, 1);
+        Ball b1 = null;
+        try {
+            b1 = new Ball(1, 1, 1, 1);
+        } catch (ImpossibleValueException e) {
+            fail();
+            e.printStackTrace();
+        }
         testPit.addBall(b1);
         testPit.launch(5, 5);
         assertEquals(0, b1.getSpeedX());
@@ -219,7 +271,13 @@ public class BallPitTest {
     @Test
     void testLaunchInside() {
         testPit.clearBallPit();
-        Ball b1 = new Ball(1, 1, 1, 1);
+        Ball b1 = null;
+        try {
+            b1 = new Ball(1, 1, 1, 1);
+        } catch (ImpossibleValueException e) {
+            fail();
+            e.printStackTrace();
+        }
         testPit.addBall(b1);
         testPit.launch(1, 0.001);
         assertEquals(0, b1.getSpeedX());
@@ -229,7 +287,13 @@ public class BallPitTest {
     @Test
     void testSlowBall() {
         testPit.clearBallPit();
-        Ball b = new Ball(1, 1, 1, 1, 1, 1, 1);
+        Ball b = null;
+        try {
+            b = new Ball(1, 1, 1, 1, 1, 1, 1);
+        } catch (ImpossibleValueException e) {
+            fail();
+            e.printStackTrace();
+        }
         testPit.addBall(b);
         testPit.slowBalls();
         assertEquals(0.9895, b.getSpeedX());
@@ -248,20 +312,30 @@ public class BallPitTest {
 
     @Test
     public void testConstructorMassAndRadius() {
-        Ball b = new Ball(1, 1);
-        assertEquals(1, b.getMass());
-        assertEquals(1, b.getRadius());
-        assertEquals(0, b.getSpeedX());
-        assertEquals(0, b.getSpeedY());
+        try {
+            Ball b = new Ball(1, 1);
+            assertEquals(1, b.getMass());
+            assertEquals(1, b.getRadius());
+            assertEquals(0, b.getSpeedX());
+            assertEquals(0, b.getSpeedY());
+        } catch (ImpossibleValueException e) {
+            fail();
+            e.printStackTrace();
+        }
     }
 
     @Test
     public void testConstructorMassRadiusAndColor() {
-        Ball b = new Ball(1, 1, Color.RED);
-        assertEquals(1, b.getMass());
-        assertEquals(1, b.getRadius());
-        assertEquals(0, b.getSpeedX());
-        assertEquals(0, b.getSpeedY());
-        assertEquals(Color.RED, b.getColor());
+        try {
+            Ball b = new Ball(1, 1, Color.RED);
+            assertEquals(1, b.getMass());
+            assertEquals(1, b.getRadius());
+            assertEquals(0, b.getSpeedX());
+            assertEquals(0, b.getSpeedY());
+            assertEquals(Color.RED, b.getColor());
+        } catch (ImpossibleValueException e) {
+            fail();
+            e.printStackTrace();
+        }
     }
 }
