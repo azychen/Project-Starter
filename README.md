@@ -53,3 +53,6 @@ As a user, I want to...
 #### Phase 4: Task 2
 I chose to design a class such that it is robust. Particularly, I decided to use this on the Ball class, such that balls with impossible mass and radius cannot be constructed. The methods which use this robust design are the constructors which create each ball.
 
+#### Phase 4: Task 3
+- Problem 1: Poor cohesion regarding the main class. In this particular class, one of the main issues is that in addition to running the main program (specifically ball pit related functions), the main class had also included methods responsible for mouse events and key events. To solve this lack of cohesion, I made a separate class to handle mouse events and key events called MainEventHandler.
+- Problem 2: A similar problem existed for the PitPanel class, which should be responsible only for rendering the ball pit onto the JFrame. However, there was poor cohesion, as PitPanel was also responsible for handling user input, in the form of key events and mouse events. To fix this poor cohesion, I made another class called PitPanelEventHandler in order to handle key and mouse events from the user while the ball pit is being rendered.

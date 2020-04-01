@@ -15,14 +15,12 @@ import model.BallPit;
 import persistence.Reader;
 
 import java.awt.*;
-import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 
 public class Main extends JFrame {
 
     private PitPanel pp;
-    private MouseListener ml;
 
     // FILES
     private static final String SOUND_FILE = "./data/bounce.wav";
@@ -46,24 +44,26 @@ public class Main extends JFrame {
 
         initPitPanel();
         showMainOptionPane();
-
-
     }
 
+    // MODIFIES: this
+    // EFFECTS: instantiates pit panel
     private void initPitPanel() {
         pp = new PitPanel(new BallPit(""),this);
         pp.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         pp.setLayout(new GridLayout());
 
-        addKeyListener(new KeyHandler());
-        addMouseListener();
-        getContentPane().addMouseListener(ml);
+        MainEventHandler mh = new MainEventHandler(this);
 
         addTimer();
         add(pp);
         pack();
         centreOnScreen();
         setVisible(true);
+    }
+
+    public PitPanel getPitPanel() {
+        return pp;
     }
 
     public void showMainOptionPane() {
@@ -191,104 +191,6 @@ public class Main extends JFrame {
         System.exit(0);
     }
 
-    // EFFECTS: adds mouse listener for ball pit
-    private void addMouseListener() {
-        ml = new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (SwingUtilities.isLeftMouseButton(e)) {
-                    handleMouseClick(e);
-                }
-                if (SwingUtilities.isRightMouseButton(e)) {
-                    pp.handleMouseClick(e);
-                }
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {}
-
-            @Override
-            public void mouseReleased(MouseEvent e) {}
-
-            @Override
-            public void mouseEntered(MouseEvent e) {}
-
-            @Override
-            public void mouseExited(MouseEvent e) {}
-        };
-        addMouseListener(ml);
-    }
-
-    // MODIFIES: this
-    // EFFECTS: handles mouse click
-    private void handleMouseClick(MouseEvent e) {
-        double x = BallPit.toMeters(e.getX());
-        double y = BallPit.toMeters(BallPit.toPixels(BallPit.HEIGHT) - e.getY());
-        pp.getPit().launch(x, y);
-    }
-
-
-    // class to handle key events
-    private class KeyHandler extends KeyAdapter {
-        @Override
-        public void keyPressed(KeyEvent e) {
-            handleKeyPress(e.getKeyCode());
-        }
-    }
-
-    // MODIFIES: this
-    // EFFECTS: handles key presses
-    public void handleKeyPress(int keyCode) {
-        if (!handleEarthquake(keyCode)) {
-            handleSettings(keyCode);
-        }
-    }
-
-    // MODIFIES: this
-    // EFFECTS: handles "earthquake" key binds
-    private boolean handleEarthquake(int keyCode) {
-        switch (keyCode) {
-            case KeyEvent.VK_LEFT:
-                pp.getPit().earthquakeLeft();
-                return true;
-            case KeyEvent.VK_RIGHT:
-                pp.getPit().earthquakeRight();
-                return true;
-            case KeyEvent.VK_UP:
-                pp.getPit().earthquakeUp();
-                return true;
-            case KeyEvent.VK_DOWN:
-                pp.getPit().earthquakeDown();
-                return true;
-            default:
-                return false;
-        }
-    }
-
-    // MODIFIES: this
-    // EFFECTS: handles settings key binds
-    private void handleSettings(int keyCode) {
-        switch (keyCode) {
-            case KeyEvent.VK_C:
-                pp.handleClearPit();
-                break;
-            case KeyEvent.VK_Q:
-                pp.handleQuitToMain();
-                break;
-            case KeyEvent.VK_S:
-                pp.handleSavePit();
-                break;
-            case KeyEvent.VK_R:
-                pp.handleRenamePit();
-                break;
-            case KeyEvent.VK_A:
-                pp.handleAddBall();
-                break;
-            case KeyEvent.VK_SPACE:
-                pp.getPit().addRandomBall();
-        }
-    }
-
 
     // MODIFIES: this
     // EFFECTS: centers screen
@@ -301,7 +203,7 @@ public class Main extends JFrame {
     // MODIFIES: this
     // EFFECTS: adds timer to frame
     private void addTimer() {
-        timer = new Timer((int) (BallPit.TICK_RATE * 100),
+        timer = new Timer((int) (BallPit.TICK_RATE * 150),
                 e -> {
                     pp.getPit().nextState();
                     pp.repaint();

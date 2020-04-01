@@ -1,24 +1,20 @@
 package ui;
 
 import model.BallPit;
-import model.ImpossibleValueException;
 import model.matter.Ball;
-import persistence.Writer;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.UnsupportedEncodingException;
 
+
+// represents the panel which the ball pit is rendered on.
 
 public class PitPanel extends JPanel {
 
     private Main main;
+    private PitPanelEventHandler pph;
 
     private BallPit pit;
 
@@ -28,8 +24,6 @@ public class PitPanel extends JPanel {
     private static JLabel pitName;
 
     private static final String OVERLAY_FILE = "./data/overlay.png";
-    protected static final String SAVES_FILE = "./data/ballpits.txt";
-
 
     private static final Color backgroundColor = Color.LIGHT_GRAY;
     private static final Font font = new Font("Helvetica Neue", Font.BOLD, 30);
@@ -41,6 +35,7 @@ public class PitPanel extends JPanel {
         setBackground(backgroundColor);
         this.main = main;
         initPitName();
+        pph = new PitPanelEventHandler(this);
     }
 
     // MODIFIES: this
@@ -53,6 +48,21 @@ public class PitPanel extends JPanel {
     // EFFECTS: returns pit
     public BallPit getPit() {
         return pit;
+    }
+
+    // EFFECTS: returns main
+    public Main getMain() {
+        return main;
+    }
+
+    // EFFECTS: returns pitName
+    public JLabel getPitName() {
+        return pitName;
+    }
+
+    // EFFECTS: returns the event handler
+    public PitPanelEventHandler getEventHandler() {
+        return pph;
     }
 
 
@@ -89,149 +99,8 @@ public class PitPanel extends JPanel {
                 options,
                 "Select input...");
         if (input != null) {
-            handleSettingsInput(input);
+            pph.handleSettingsInput(input);
         }
-    }
-
-    // REQUIRES: input != null
-    // MODIFIES: this
-    // EFFECTS: handles user input for settings menu
-    private void handleSettingsInput(String input) {
-        switch (input) {
-            case "Add Ball":
-                handleAddBall();
-                break;
-            case "Clear Balls":
-                handleClearPit();
-                break;
-            case "Rename Ball Pit":
-                handleRenamePit();
-                break;
-            case "Save Ball Pit":
-                handleSavePit();
-                break;
-            case "Quit to Main Menu":
-                handleQuitToMain();
-                break;
-        }
-    }
-
-    // MODIFIES: this
-    // EFFECTS: handles add ball
-    public void handleAddBall() {
-        double mass = makeSliderPane("mass (g)");
-        double radius = makeSliderPane("radius (cm)");
-        try {
-            Ball b = new Ball(mass * 0.01, radius * 0.01);
-            pit.addBall(b);
-        } catch (ImpossibleValueException e) {
-            Ball b = new Ball();
-            pit.addBall(b);
-        }
-    }
-
-    // MODIFIES: this
-    // EFFECTS: creates pane with given question
-    public double makeSliderPane(String property) {
-        JOptionPane addPane = new JOptionPane();
-        JSlider slider = makeSlider(addPane);
-        addPane.setMessage(new Object[] { "Set " + property + " > 0", slider });
-        addPane.setMessageType(JOptionPane.QUESTION_MESSAGE);
-        addPane.setOptionType(JOptionPane.OK_CANCEL_OPTION);
-        JDialog dialog = addPane.createDialog(main, "Add Ball");
-        dialog.setVisible(true);
-        String test = "test";
-        if (addPane.getInputValue().getClass() != test.getClass()) {
-            return (int) addPane.getInputValue();
-        } else {
-            return makeSliderPane(property);
-        }
-    }
-
-    // MODIFIES: this
-    // EFFECTS: handles clear ball pit
-    public void handleClearPit() {
-        pit.clearBallPit();
-        JOptionPane.showMessageDialog(null,
-                pit.getName() + " was successfully cleared!",
-                pit.getName() + " Cleared",
-                JOptionPane.PLAIN_MESSAGE);
-    }
-
-    // MODIFIES: this
-    // EFFECTS: handles rename ball pit
-    public void handleRenamePit() {
-        String oldName = pit.getName();
-        String newName = (String)JOptionPane.showInputDialog(
-                null,
-                "Enter new name:",
-                "Settings",
-                JOptionPane.PLAIN_MESSAGE,
-                null,
-                null,
-                "My Ball Pit");
-        if (newName != null) {
-            pit.setName(newName);
-            pitName.setText(newName);
-            JOptionPane.showMessageDialog(null,
-                    oldName + " was renamed to " + pit.getName() + ".",
-                    "Success!",
-                    JOptionPane.PLAIN_MESSAGE);
-        }
-    }
-
-    // MODIFIES: this
-    // EFFECTS: handles save ball pit
-    public void handleSavePit() {
-        try {
-            savePit();
-        } catch (FileNotFoundException e) {
-            JOptionPane.showMessageDialog(null,
-                    "File not found. Please try again.",
-                    "ERROR",
-                    JOptionPane.ERROR_MESSAGE);
-        } catch (UnsupportedEncodingException e) {
-            JOptionPane.showMessageDialog(null,
-                    "Unsupported encoding. Please try again.",
-                    "ERROR",
-                    JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    // MODIFIES: this
-    // EFFECTS: attempts to save ball pit
-    private void savePit() throws FileNotFoundException, UnsupportedEncodingException {
-        JOptionPane.showMessageDialog(null,
-                "Attempting to save " + pit.getName() + "...",
-                "Saving...",
-                JOptionPane.PLAIN_MESSAGE);
-        Writer writer = new Writer(new File(SAVES_FILE));
-        writer.write(pit);
-        writer.close();
-        JOptionPane.showMessageDialog(null,
-                "Successfully saved " + pit.getName() + "!",
-                "Success!",
-                JOptionPane.PLAIN_MESSAGE);
-    }
-
-    // MODIFIES: this
-    // EFFECTS: handles quit to main menu
-    public void handleQuitToMain() {
-        Object[] options = {"Yes",
-                "No"};
-        int res = JOptionPane.showOptionDialog(null,
-                "Would you like to save " + pit.getName() + "?",
-                "Confirm",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                options,
-                options[0]);
-        if (res == JOptionPane.YES_OPTION) {
-            handleSavePit();
-        }
-//        setPit(new BallPit(""));
-        main.showMainOptionPane();
     }
 
 
@@ -265,7 +134,7 @@ public class PitPanel extends JPanel {
 
 
 
-    static JSlider makeSlider(final JOptionPane optionPane) {
+    public static JSlider makeSlider(final JOptionPane optionPane) {
         JSlider slider = new JSlider();
         slider.setMajorTickSpacing(10);
         slider.setPaintTicks(true);
