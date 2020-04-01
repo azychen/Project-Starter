@@ -15,7 +15,6 @@ public class PitPanelEventHandler {
 
     protected static final String SAVES_FILE = "./data/ballpits.txt";
 
-
     private PitPanel pp;
 
     public PitPanelEventHandler(PitPanel pp) {
