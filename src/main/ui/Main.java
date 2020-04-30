@@ -2,7 +2,7 @@ package ui;
 
 
 /*
- *      This is the entry point for the program.
+ *      This program was built for a university assignment.
  */
 
 
