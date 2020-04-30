@@ -1,12 +1,12 @@
 # BALL PIT
 
-![shapes](https://www.littlestepsasia.com/sites/default/files/imagecache/article_node_image/article/hero/Best-Indoor-Playrooms-Hong-Kong_0.png)
+![shapes](https://i.dailymail.co.uk/1s/2019/04/26/15/12753288-6963675-image-a-8_1556290394933.jpg)
 ## Anton Chen 
 
-> _**What** will the application do?_
+> _**What** does this application do?_
 
-This project will be able simulate a 2 dimensional physical environment under
-the effects of gravity and collisions with other objects. In addition, objects may be 
+This project is able to simulate a 2 dimensional physical environment with object collisions under
+the effects of gravity and friction. In addition, objects may be 
 created by a user, with physical
 properties able to be specified by the user.
 
@@ -29,11 +29,11 @@ in this field by demonstrating how fun physical phenomena may be.
 Additionally, the prospect of accurately and precisely simulating 
 real-world actions would also quite challenging to me.   
 
-####Instructions for Grader
+<!-- ####Instructions for Grader
  - Step 1: create a new ball pit, or load the saved ball pit when opening the application
  - Step 2: to add ball to ball pit, click on settings icon, and add ball (or press "A")
  - Step 3: to trigger audiovisual component, use the arrow keys to make balls collide with each other
- - Step 4: to save ball pit, click save ball pit in settings. 
+ - Step 4: to save ball pit, click save ball pit in settings.  -->
 
 
 #### Phase 1: Stories
