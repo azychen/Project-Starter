@@ -1,7 +1,20 @@
-# BALL PIT
+<br />
+<p align="center">
+    <a href="https://github.com/azychen/rubiks-cube-solver">
+        <img src="data/screenshots/header.png" alt="Logo" width="180" >
+    </a>
+    <h2 align="center" >Virtual Ball Pit</h2>
 
-![shapes](https://i.dailymail.co.uk/1s/2019/04/26/15/12753288-6963675-image-a-8_1556290394933.jpg)
-## Anton Chen 
+  <p align="center">
+    A simple two-dimensional physics engine simulating inelastic collisions between balls and their surroundings. Term project for the CPSC 210 (Software Construction) course at UBC.
+    <br />
+    <a href="https://github.com/azychen/rubiks-cube-solver">View Demo</a>
+    ·
+    <a href="https://github.com/azychen/rubiks-cube-solver/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/azychen/rubiks-cube-solver/issues">Request Feature</a>
+  </p>
+</p>
 
 > _**What** does this application do?_
 
