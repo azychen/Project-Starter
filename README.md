@@ -7,7 +7,7 @@
     <h2 align="center" >Virtual Ball Pit</h2>
 
   <p align="center">
-    This program is a simple two-dimensional physics engine simulating inelastic collisions between balls and their surroundings. Term project for the CPSC 210 (Software Construction) course at UBC.
+    This program is a simple two-dimensional physics engine simulating inelastic collisions between balls and their surroundings. Term project for CPSC 210 (Software Construction) at the University of British Columbia.
     <br />
   </p>
 </p>
