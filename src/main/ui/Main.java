@@ -34,8 +34,8 @@ public class Main extends JFrame {
 
     // EFFECTS: constructs main menu
     public Main() {
-        super("THE BALL PIT");
-        setTitle("THE BALL PIT");
+        super("Virtual Ball Pit");
+        setTitle("Virtual Ball Pit");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         pack();
@@ -203,7 +203,7 @@ public class Main extends JFrame {
     // MODIFIES: this
     // EFFECTS: adds timer to frame
     private void addTimer() {
-        timer = new Timer((int) (BallPit.TICK_RATE * 150),
+        timer = new Timer((int) (BallPit.TICK_RATE * 250),
                 e -> {
                     pp.getPit().nextState();
                     pp.repaint();
