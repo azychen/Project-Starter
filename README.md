@@ -7,17 +7,19 @@
     <h2 align="center" >Virtual Ball Pit</h2>
 
   <p align="center">
-    A simple two-dimensional physics engine simulating inelastic collisions between balls and their surroundings. Term project for the CPSC 210 (Software Construction) course at UBC.
+    This program is a simple two-dimensional physics engine simulating inelastic collisions between balls and their surroundings. Term project for the CPSC 210 (Software Construction) course at UBC.
     <br />
   </p>
 </p>
+
+![GIF](data/demos/ballpit_demo.gif)
 
 <!-- TABLE OF CONTENTS -->
 
 ## Table of Contents
 
 * [Background](#background)
-<!-- * [Demo](#demo) -->
+* [Demo](#demo)
 * [Outline](#outline)
   * [UML Design Diagram](#uml-design-diagram)
   * [Class Hierarchy](#class-hierarchy)
@@ -46,6 +48,17 @@ This project is primarily intended to be used by a younger demographic of studen
 > _**Why** did I decide on this project idea?_
 
 I thought that it was a challenging task to translate theoretical concepts I learned from other classes into concrete code which can accurately explain real-world phenomena, particularly that of momentum. Not only will this help me gain a deeper understanding of these concepts, but will also allow me to practice object-oriented programming techniques to solve problems.
+
+<!-- DEMO -->
+
+## Demo
+
+### Create Ball Pit
+![GIF](data/demos/create_ballpit.gif)
+
+### Load Ball Pit
+![GIF](data/demos/load_ballpit.gif)
+
 
 <!-- OUTLINE -->
 
