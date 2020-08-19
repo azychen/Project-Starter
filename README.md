@@ -1,3 +1,4 @@
+<!-- PROJECT LOGO -->
 <br />
 <p align="center">
     <a href="https://github.com/azychen/rubiks-cube-solver">
@@ -16,31 +17,56 @@
   </p>
 </p>
 
+<!-- TABLE OF CONTENTS -->
+
+## Table of Contents
+
+* [Background](#background)
+* [Outline](#outline)
+* [Roadmap](#roadmap)
+<!-- * [Demo](#demo) -->
+
+<!-- BACKGROUND -->
+
+## Background
+
+<!-- [![Product Name Screen Shot][product-screenshot]](https://example.com) -->
+
 > _**What** does this application do?_
 
-This project is able to simulate a 2 dimensional physical environment with object collisions under
-the effects of gravity and friction. In addition, objects may be 
-created by a user, with physical
-properties able to be specified by the user.
+This project is able to simulate a 2 dimensional physical environment with object collisions under the effects of gravity and friction. In addition, objects may be 
+created by a user, with specifiable physical attributes.
 
 > _**Who** will use it?_
 
-This project is primarily intended to be used by a younger demographic of students in an 
-educational setting, where they can "get their hands dirty" and toy around with various physical
-phenomena. However, this project has the aim of being more than a toy, with intended functionality 
-including calculations and values, simulating an experimental setting.     
+This project is primarily intended to be used by a younger demographic of students in an educational setting, where they can "get their hands dirty" and toy around with various physical phenomena.      
 
 > _**Why** did I decide on this project idea?_
 
-The notion that mathematics, a purely man-made concept, can accurately explain real world phenomena
-astounds me. This deep fascination in our own world that we exist in motivated me to further 
-explore that concept in another context - through programming.  Not only would working on this
-project be something truly exciting for me, it would also be greatly beneficial
-to the future of the field. Targeting a younger demographic is a 
-key component of this project, with the aim of sparking interest
-in this field by demonstrating how fun physical phenomena may be.
-Additionally, the prospect of accurately and precisely simulating 
-real-world actions would also quite challenging to me.   
+The idea that mathematics - a purely man-made and theoretical concept - can accurately explain real world phenomena astounds me. That's why I decided to create this program, exploring how these rules work to move things that we can see. 
+
+<!-- OUTLINE -->
+
+## Outline
+
+* This program is written in [**Java**](https://java.com/en/download/).
+* Unit testing is done with [**JUnit 5**](https://junit.org/junit5/).
+* GUI written with [**Swing**](https://en.wikipedia.org/wiki/Swing_(Java)).
+
+### UML Design Diagram and Type Hierarchies
+
+<a href="https://github.com/azychen/rubiks-cube-solver">
+    <img src="data/screenshots/uml_diagram.png" alt="Logo" width="6000" >
+</a>
+
+- _Matter_ is an abstract class holding generic information regarding objects within the environment (e.g. mass, speed, and position).
+- _Ball_ is a specific subclass of _Matter_, with properties specific to a ball (e.g. radius)
+- _BallPit_ is an aggregate class of all of _Matter_ objects, and environment characteristics (e.g. width, height). 
+
+<!-- ROADMAP -->
+
+## Roadmap
+
 
 <!-- ####Instructions for Grader
  - Step 1: create a new ball pit, or load the saved ball pit when opening the application
@@ -64,8 +90,8 @@ As a user, I want to...
 
 
 #### Phase 4: Task 2
-I chose to design a class such that it is robust. Particularly, I decided to use this on the Ball class, such that balls with impossible mass and radius cannot be constructed. The methods which use this robust design are the constructors which create each ball.
+I chose to design a class such that it is robust. Particularly, I decided to use this on the _Ball_ class, such that balls with impossible mass and radius cannot be constructed. The methods which use this robust design are the constructors which create each ball.
 
 #### Phase 4: Task 3
-- Problem 1: Poor cohesion regarding the main class. In this particular class, one of the main issues is that in addition to running the main program (specifically ball pit related functions), the main class had also included methods responsible for mouse events and key events. To solve this lack of cohesion, I made a separate class to handle mouse events and key events called MainEventHandler.
-- Problem 2: A similar problem existed for the PitPanel class, which should be responsible only for rendering the ball pit onto the JFrame. However, there was poor cohesion, as PitPanel was also responsible for handling user input, in the form of key events and mouse events. To fix this poor cohesion, I made another class called PitPanelEventHandler in order to handle key and mouse events from the user while the ball pit is being rendered.
+- Problem 1: Poor cohesion regarding the _Main_ class. In this particular class, one of the main issues is that in addition to running the main program (specifically ball pit related functions), this class had also included methods responsible for mouse events and key events. To solve this lack of cohesion, I made a separate class to handle mouse events and key events called _MainEventHandler_.
+- Problem 2: A similar problem existed for the _PitPanel_ class, which should be responsible only for rendering the ball pit onto the JFrame. However, there was poor cohesion, as _PitPanel_ was also responsible for handling user input, in the form of key events and mouse events. To fix this poor cohesion, I made another class called _PitPanelEventHandler_ in order to handle key and mouse events from the user while the ball pit is being rendered.
