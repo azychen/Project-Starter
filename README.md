@@ -1,7 +1,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-    <a href="https://github.com/azychen/rubiks-cube-solver">
+    <a href="https://github.com/azychen/virtual-ball-pit">
         <img src="data/screenshots/header.png" alt="Logo" width="180" >
     </a>
     <h2 align="center" >Virtual Ball Pit</h2>
@@ -24,10 +24,10 @@
   * [UML Design Diagram](#uml-design-diagram)
   * [Class Hierarchy](#class-hierarchy)
 * [Roadmap](#roadmap)
-  * [Phase 1: Basic Model and User Interaction](#phase-1)
-  * [Phase 2: Data Persistence](#phase-2)
-  * [Phase 3: Graphical User Interface](#phase-3)
-  * [Phase 4: Design](#phase-4)
+  * [Phase 1: Basic Model and User Interaction](#phase-1-program-functionality)
+  * [Phase 2: Data Persistence](#phase-2-data-persistence)
+  * [Phase 3: Graphical User Interface](#phase-3-graphical-user-interface)
+  * [Phase 4: Design](#phase-4-design)
 <!-- * [Demo](#demo) -->
 
 <!-- BACKGROUND -->
