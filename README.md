@@ -1,7 +1,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-    <a href="https://github.com/azychen/virtual-ball-pit">
+    <a href="https://github.com/chenanton/virtual-ball-pit">
         <img src="data/screenshots/header.png" alt="Logo" width="180" >
     </a>
     <h2 align="center" >Virtual Ball Pit</h2>
@@ -74,7 +74,7 @@ I thought that it was a challenging task to translate theoretical concepts I lea
 ### UML Design Diagram
 
 <!-- UML DESIGN DIAGRAM -->
-<a href="https://github.com/azychen/rubiks-cube-solver">
+<a href="https://github.com/chenanton/virtual-ball-pit">
     <img src="data/screenshots/uml_diagram.png" alt="Logo" width="6000" >
 </a>
 
